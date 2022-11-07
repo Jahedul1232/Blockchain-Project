@@ -21,19 +21,20 @@ const hre = require("hardhat");
 // New Smart Contract ........................
 
 async function main() {
-  const Storage = await hre.ethers.getContractFactory("test");
+  const Storage = await hre.ethers.getContractFactory("Course");
   console.log("Deploying....");
   const storage = await Storage.deploy();
   await storage.deployed();
   console.log("Contract deployed to : ", storage.address);
 
-  // const transacionResponce = await storage.getBookId(1);
-  // await transacionResponce.wait(1);
-  // const update = await storage.getData(12);
-  // console.log(`Updated value is : ${update}`);
-
-  const currentValue = await storage.getData(12);
+  const currentValue = await storage.getInstructorInfos(1);
   console.log(`current value is : ${currentValue}`);
+
+  //update the current value
+  const transacionResponce = await storage.setInstructor(2, 27, "hello", "Md");
+  await transacionResponce.wait(1);
+  const update = await storage.getInstructorInfos(2);
+  console.log(`Updated value is : ${update}`);
 }
 
 main()
