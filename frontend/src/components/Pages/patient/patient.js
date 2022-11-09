@@ -18,7 +18,8 @@ function Patient() {
 
   let contract;
   const connectContract = async () => {
-    const Address = "0xD698932D2992aFA8085aE923ef2738c37b7bA587";
+    const Address = "0x2543EcF768b26FB53f54B665Fc214B776402CA02";
+    //"0xD698932D2992aFA8085aE923ef2738c37b7bA587";
     const ABI = [
       {
         inputs: [],
@@ -64,15 +65,15 @@ function Patient() {
     const signer = provider.getSigner();
     contract = new ethers.Contract(Address, ABI, signer);
     console.log(contract.address);
-  };
+  };;
 
-  const getData = async () => {
+  const getContractData = async () => {
     const phrase = await contract.getData();
     setContractData(phrase);
   };
 
   const changeData = async () => {
-    const tx = await contract.setData("hi, there");
+    const tx = await contract.setData("hi there");
     const txReciept = await tx.wait();
     console.log(txReciept);
   };
@@ -83,8 +84,9 @@ function Patient() {
       <p>{account}</p>
       <button onClick={connectContract}>Connect to Contract</button>
       <button onClick={changeData}>Change</button>
-      <button onClick={getData}>Read from contract</button>
+      <button onClick={getContractData}>Read from contract</button>
       <p>{contractData}</p>
+      {/* <p>{contractData[1]}</p> */}
       <div>
         <h2>Register Patient</h2>
         <form>

@@ -1,4 +1,4 @@
-const hre = require("hardhat");
+// const hre = require("hardhat");
 
 // async function main() {
 //   const Storage = await hre.ethers.getContractFactory("dataStorage");
@@ -17,8 +17,15 @@ const hre = require("hardhat");
 //     console.error(error);
 //     process.exit(1);
 //   });
+//
+//
+//
+//
+//
 
-// New Smart Contract ........................
+// New Smart Contract deployment for Patient.sol smartContract ........................
+
+const hre = require("hardhat");
 
 async function main() {
   const Storage = await hre.ethers.getContractFactory("Course");
@@ -31,9 +38,10 @@ async function main() {
   console.log(`current value is : ${currentValue}`);
 
   //update the current value
-  const transacionResponce = await storage.setInstructor(2, 27, "hello", "Md");
+  const transacionResponce = await storage.setInstructor(1, 25);
   await transacionResponce.wait(1);
-  const update = await storage.getInstructorInfos(2);
+  console.log("data stored");
+  const update = await storage.setInstructor(1);
   console.log(`Updated value is : ${update}`);
 }
 
