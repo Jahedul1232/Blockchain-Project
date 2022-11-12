@@ -1,5 +1,7 @@
 import "./Navbar.css";
 import Patient from "../../patient/patient";
+import navImage from "../../../../assets/images.jpeg"
+
 
 function Navbar() {
   return (
@@ -21,10 +23,13 @@ function Navbar() {
     // </nav>
     <div className="nav">
       <nav className="flex sm:justify-center space-x-4">
-        {[["Blochchain App", "/"]].map(([title, url]) => (
+        <div className="navPic">
+          <img src={navImage} alt=""></img>
+        </div>
+        {[["Blockchain-App", "/"]].map(([title, url]) => (
           <a
             href={url}
-            className="rounded-lg px-3 py-3 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900 nav1"
+            className="rounded-lg px-5 py-9 text-slate-700 font-medium hover:bg-slate-0 hover:text-slate-900 nav1"
           >
             {title}
           </a>
@@ -38,7 +43,7 @@ function Navbar() {
         ].map(([title, url]) => (
           <a
             href={url}
-            className="rounded-lg px-3 py-3 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900 nav2"
+            className="rounded-lg px-3 py-3 text-slate-700 font-medium hover:bg-slate-300 hover:text-slate-900 nav2"
           >
             {title}
           </a>

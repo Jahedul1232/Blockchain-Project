@@ -40,15 +40,25 @@ body{
 .nav li.active{
    background-color: #555;
 }
-.nav li:hover{
+/* .nav li:hover{
    background-color: #777;
-}
+} */
 
 
 .nav1{
+   /* margin-left: 100px; */
+   /* margin-right: -50px; */
+   /* padding-left: 50px; */
    font-size: 1.3rem;
+   font-weight: 300;
 }
 
 .nav2{
    font-size: 1.3rem;
+   font-weight: 300;
+}
+.navPic{
+   margin-right: -40px;
+   height: 15%;
+   width: 15%;
 }

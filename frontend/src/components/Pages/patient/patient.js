@@ -4,7 +4,7 @@ import "./patient.css";
 
 function Patient() {
   let [account, setAccount] = useState("");
-  let [contractData, setContractData] = useState("");
+  let [contractData, setContractData] = useState();
 
   const { ethereum } = window;
   const connectMetamask = async () => {
@@ -18,48 +18,46 @@ function Patient() {
 
   let contract;
   const connectContract = async () => {
-    const Address = "0x2543EcF768b26FB53f54B665Fc214B776402CA02";
+    const Address = "0x6C4942E6cf63C03055DC2ADF35ea02E9a34B1682";
     //"0xD698932D2992aFA8085aE923ef2738c37b7bA587";
     const ABI = [
       {
-        inputs: [],
-        name: "getData",
-        outputs: [
+        "inputs": [
           {
-            internalType: "string",
-            name: "",
-            type: "string",
-          },
+            "internalType": "uint256",
+            "name": "index",
+            "type": "uint256"
+          }
         ],
-        stateMutability: "view",
-        type: "function",
+        "name": "getInstructorInfos",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
       },
       {
-        inputs: [],
-        name: "name",
-        outputs: [
+        "inputs": [
           {
-            internalType: "string",
-            name: "",
-            type: "string",
+            "internalType": "uint256",
+            "name": "index",
+            "type": "uint256"
           },
-        ],
-        stateMutability: "view",
-        type: "function",
-      },
-      {
-        inputs: [
           {
-            internalType: "string",
-            name: "_name",
-            type: "string",
-          },
+            "internalType": "uint256",
+            "name": "_age",
+            "type": "uint256"
+          }
         ],
-        name: "setData",
-        outputs: [],
-        stateMutability: "nonpayable",
-        type: "function",
-      },
+        "name": "setInstructor",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      }
     ];
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
@@ -68,26 +66,60 @@ function Patient() {
   };;
 
   const getContractData = async () => {
-    const phrase = await contract.getData();
-    setContractData(phrase);
+    const phrase = await contract.getInstructorInfos(1);
+    console.log(phrase)
+    // setContractData(phrase);
   };
 
   const changeData = async () => {
-    const tx = await contract.setData("hi there");
+    const tx = await contract.setInstructor();
     const txReciept = await tx.wait();
     console.log(txReciept);
   };
 
   return (
     <div className="app">
-      <button onClick={connectMetamask}>Connect to metamask</button>
-      <p>{account}</p>
-      <button onClick={connectContract}>Connect to Contract</button>
-      <button onClick={changeData}>Change</button>
-      <button onClick={getContractData}>Read from contract</button>
-      <p>{contractData}</p>
       {/* <p>{contractData[1]}</p> */}
-      <div>
+
+    <div className="inputs">
+      <h2>Register Patient</h2>
+      <br />
+      <div class="row form-floating mb-2">
+        <input type="text" class="form-control" id="floatingInput" placeholder="Patient id" />
+        <label for="floatingInput">Patient Id</label>
+      </div>
+      <div class="form-floating mb-2">
+        <input type="text" class="form-control" id="floatingInput" placeholder="name" />
+        <label for="floatingInput">Patient Name</label>
+      </div>
+      <div class="form-floating mb-2">
+        <input type="number" class="form-control" id="floatingInput" placeholder="number" />
+        <label for="floatingInput">Age</label>
+      </div>
+      <div class="form-floating mb-2">
+        <input type="text" class="form-control" id="floatingInput" placeholder="name" />
+        <label for="floatingInput">Gender</label>
+      </div>
+      <div class="form-floating mb-2">
+        <input type="number" class="form-control" id="floatingInput" placeholder="number" />
+        <label for="floatingInput">Height</label>
+      </div>
+      <div class="form-floating mb-2">
+        <input type="text" class="form-control" id="floatingInput" placeholder="name" />
+        <label for="floatingInput">Address</label>
+      </div>
+      <button onClick={connectMetamask}>Connect to metamask</button>
+      <p><br />{account}</p>
+      <button onClick={connectContract}>Connect to Contract</button>
+      <br />
+      <button onClick={changeData}>Change</button>
+      <br />
+      <button onClick={getContractData}>Read from contract</button>
+      <br />
+      <p>{contractData}</p>
+      
+    </div>
+      {/* <div>
         <h2>Register Patient</h2>
         <form>
           <table>
@@ -162,7 +194,7 @@ function Patient() {
             </tr>
           </table>
         </form>
-      </div>
+      </div> */}
     </div>
   );
 }

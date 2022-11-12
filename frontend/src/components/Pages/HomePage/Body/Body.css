@@ -8,8 +8,9 @@
     font-weight: 600;
     color: rgb(64, 64, 64);
     line-height: 39px;
-    margin-top: 100px;
+    margin-top: 50px;
     margin-left: 78px;
+    text-align: left;
 }
 
 .after_title{
@@ -19,6 +20,7 @@
     line-height: 17px;
     margin-top: 10px;
     margin-left: 78px;
+    text-align: left;
 }
 
 .button{
@@ -31,65 +33,114 @@
   flex-direction: row;
   -webkit-box-pack: justify;
   justify-content: space-between;
-  margin-top: 150px;
+  margin-top: 50px;
   /* margin-bottom: 60px; */
   margin-left: 78px;
   padding-left: 10px;
 }
 
 .boxes{
-  margin-top: 40px;
+  margin-top: 10px;
 }
 
 .left_one {
-  float:left; 
+  /* float:left;  */
   background:#faf7f7;
-  width:25%;
-  height:320px;
+  /* width:30%; */
+  /* height:280px; */
 }
 .middle_one{
-  float:left; 
+  /* float:left;  */
   background:#faf7f7;
-  width:50%;
-  height:320px;
+  /* width:40%; */
+  /* height: 60%; */
+  /* height:280px; */
 }
 .right_one{
-  float:right;
+  /* float:right; */
   background:#faf7f7;
-  width:25%;
-  height:320px;
+  /* width:30%; */
+  /* height:280px; */
 }
 
-.right_one:hover{
+/* .right_one:hover{
   background-color: #f5e7e7;
   /* color: #f5e7e7 ; */
-}
+/* } */ */
+
+/* .left_box_design{
+  padding: 100px;
+} */
 
 .left_title{
-  margin-top: 220px;
+  margin-top: 10px;
+  /* padding-top: 20px; */
   margin-left: 40px;
+  margin-right: 20px;
   font-size: 17px;
 }
-.left_one:hover{
+/* .left_one:hover{
   background-color: #f5e7e7;
-}
+} */
 
 .middle_title{
-  margin-top: 180px;
-  font-size: 30px;
+  padding-top: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+  font-size: 17px;
+  font-weight: 400;
 }
-.middle_title_h1{
+/* .middle_title_h1{
   margin-top: 10px;
   font-size: 18px;
-}
-.middle_one:hover{
+} */
+/* .middle_one:hover{
   background-color: #f5e7e7;
-}
+} */
 
 
 
 .right_title{
   margin-right: 40px ;
-  margin-top: 220px;
+  margin-top: -10px;
   font-size: 17px;
+}
+.image_grid{
+  width: 50%;
+  height: 70%;
+  margin-top: 70px;
+  /* margin-right: 10px; */
+  /* padding-bottom: 350px; */
+  margin-left: 50px;
+  /* margin: 200px; */
+}
+
+.box_image img{
+  max-height: 150px;
+  margin: 20px auto;
+}
+
+
+.left_box_image{
+  /* margin-top: 50px;
+  margin-left: 90px;
+  align-items: center;
+  height: 80%;
+  width: 60%; */
+}
+
+.middle_box_image{
+  /* margin-top: 35px;
+  margin-left: 180px;
+  height: 50%;
+  align-items: center;
+  width: 30%; */
+}
+
+.right_image_dox{
+  /* height: 50%;
+  width: 60%;
+  margin-left: 80px;
+  margin-top: 20px;
+  margin-bottom: 40px; */
 }

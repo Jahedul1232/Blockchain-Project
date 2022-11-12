@@ -1,12 +1,16 @@
 import "./Body.css";
+import image from "../../../../assets/mobile_data.jpg"
+import left_image from "../../../../assets/node.png"
+// import middle_image from "../../../../assets/Blockchain_image.jpg"
+import right_image from "../../../../assets/history1.png"
+import middle_image from "../../../../assets/blockchain.png"
+
 
 function Body() {
   return (
     <div>
-      <div class="grid grid-flow-row-dense grid-cols-2 grid-rows-1 ...  ">
-        {/* <div class="col-span-2">01</div>
-        <div class="col-span-2">02</div> */}
-        <div>
+      <div class="flex flex-row">
+        <div class="basis-2/3">
           <div className="title">
             <h2>
               Blockchain Based Patient Record <br /> Linkage System
@@ -15,39 +19,63 @@ function Body() {
           <div className="after_title">
             A nation wide project for storing patients health records
             <br />
-            Govtment Authorities
+            A product developed by eSRD Lab
           </div>
           <div className="button">
             <button>Get Started</button>
           </div>
         </div>
-        <div>
-          <div>
-            <h3>Hello world</h3>
+        <div class="basis-1/3">
+          <div className="image_grid">
+            <img src={image} alt =""></img>
           </div>
         </div>
       </div>
-      <div className="boxes">
-        <div className="left_one">
-          <div className="left_title">
-            Every node in the network has a copy of the digital ledger
+      <div className="container">
+        <div className="row">
+          <div className="col-12 col-sm-6 col-md-4">
+            <div className="left_one">
+            <div className="left_box_design">
+              <div className="box_image">
+                <img src={left_image} class="fluid-img" alt =""></img>
+              </div>
+              <div className="left_title">
+                Every node in the network has a copy of the digital ledger
+              </div>
+            </div>
           </div>
-        </div>
+          </div>
+          <div className="col-12 col-sm-6 col-md-4">
         <div className="middle_one">
-          <div>
-            <div className="middle_title">Blockchain</div>
-            <h1 className="middle_title_h1">
+          <div className="middle_box_design">
+            <div className="box_image">
+              <img src={middle_image} class="fluid-img" alt=""></img>
+            </div>
+            {/* <div className="middle_title">Blockchain</div> */}
+            <h1 className="middle_title">
               A digital database or ledger that is distributed among of a
               peer-to-peer network
             </h1>
           </div>
         </div>
+        </div>
+        <div className="col-12 col-sm-6 col-md-4">
         <div className="right_one">
+          <div className="box_image">
+              <img src={right_image} class="fluid-img" alt=""></img>
+          </div>
           <div className="right_title">
-            A pillar in making the business and governmental procedures more
-            secure
+          Maintains a complete history of past transactions within the network
           </div>
         </div>
+        </div>
+        </div>
+        
+      </div>
+      <div className="boxes">
+        
+        
+        
       </div>
     </div>
   );
