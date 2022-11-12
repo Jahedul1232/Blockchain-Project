@@ -39,7 +39,7 @@ function Navbar() {
         {[
           ["Patient", "/Patient"],
           ["About", "/doctor"],
-          ["Login", "/"],
+          ["Login", "#text"],
         ].map(([title, url]) => (
           <a
             href={url}

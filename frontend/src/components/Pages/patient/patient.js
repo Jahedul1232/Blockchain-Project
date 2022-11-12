@@ -18,107 +18,194 @@ function Patient() {
 
   let contract;
   const connectContract = async () => {
-    const Address = "0x6C4942E6cf63C03055DC2ADF35ea02E9a34B1682";
+    const Address = "0x6b0ABceE00465fB16462678334fD9673404e8d77";
     //"0xD698932D2992aFA8085aE923ef2738c37b7bA587";
     const ABI = [
       {
-        "inputs": [
+        inputs: [
           {
-            "internalType": "uint256",
-            "name": "index",
-            "type": "uint256"
-          }
-        ],
-        "name": "getInstructorInfos",
-        "outputs": [
-          {
-            "internalType": "uint256",
-            "name": "",
-            "type": "uint256"
-          }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-      },
-      {
-        "inputs": [
-          {
-            "internalType": "uint256",
-            "name": "index",
-            "type": "uint256"
+            internalType: "string",
+            name: "_name",
+            type: "string",
           },
           {
-            "internalType": "uint256",
-            "name": "_age",
-            "type": "uint256"
-          }
+            internalType: "string",
+            name: "_add",
+            type: "string",
+          },
+          {
+            internalType: "uint256",
+            name: "_age",
+            type: "uint256",
+          },
         ],
-        "name": "setInstructor",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      }
+        name: "create",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+      },
+      {
+        inputs: [
+          {
+            internalType: "uint256",
+            name: "_index",
+            type: "uint256",
+          },
+        ],
+        name: "get",
+        outputs: [
+          {
+            internalType: "string",
+            name: "name",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "add",
+            type: "string",
+          },
+          {
+            internalType: "uint256",
+            name: "age",
+            type: "uint256",
+          },
+        ],
+        stateMutability: "view",
+        type: "function",
+      },
+      {
+        inputs: [
+          {
+            internalType: "uint256",
+            name: "",
+            type: "uint256",
+          },
+        ],
+        name: "todos",
+        outputs: [
+          {
+            internalType: "string",
+            name: "name",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "add",
+            type: "string",
+          },
+          {
+            internalType: "uint256",
+            name: "age",
+            type: "uint256",
+          },
+        ],
+        stateMutability: "view",
+        type: "function",
+      },
     ];
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     contract = new ethers.Contract(Address, ABI, signer);
     console.log(contract.address);
-  };;
-
-  const getContractData = async () => {
-    const phrase = await contract.getInstructorInfos(1);
-    console.log(phrase)
-    // setContractData(phrase);
   };
 
   const changeData = async () => {
-    const tx = await contract.setInstructor();
+    const tx = await contract.create("hadiul", "south carolin", 27);
     const txReciept = await tx.wait();
     console.log(txReciept);
   };
+
+  const getContractData = async () => {
+    const phrase = await contract.get(1);
+    console.log(phrase[0]);
+    console.log(phrase[1]);
+    console.log(phrase[2]);
+    // setContractData(phrase);
+  };
+
+  // const changeData1 = async () => {
+  //   const tx = await contract.set_reta("hi there");
+  //   const txReciept = await tx.wait();
+  //   console.log(txReciept);
+  // };
 
   return (
     <div className="app">
       {/* <p>{contractData[1]}</p> */}
 
-    <div className="inputs">
-      <h2>Register Patient</h2>
-      <br />
-      <div class="row form-floating mb-2">
-        <input type="text" class="form-control" id="floatingInput" placeholder="Patient id" />
-        <label for="floatingInput">Patient Id</label>
+      <div className="inputs">
+        <h2>Register Patient</h2>
+        <br />
+        <div class="row form-floating mb-2">
+          <input
+            type="text"
+            class="form-control"
+            id="floatingInput"
+            placeholder="Patient id"
+          />
+          <label for="floatingInput">Patient Id</label>
+        </div>
+        <div class="form-floating mb-2">
+          <input
+            type="text"
+            class="form-control"
+            id="floatingInput"
+            placeholder="name"
+          />
+          <label for="floatingInput">Patient Name</label>
+        </div>
+        <div class="form-floating mb-2">
+          <input
+            type="number"
+            class="form-control"
+            id="floatingInput"
+            placeholder="number"
+          />
+          <label for="floatingInput">Age</label>
+        </div>
+        <div class="form-floating mb-2">
+          <input
+            type="text"
+            class="form-control"
+            id="floatingInput"
+            placeholder="name"
+          />
+          <label for="floatingInput">Gender</label>
+        </div>
+        <div class="form-floating mb-2">
+          <input
+            type="number"
+            class="form-control"
+            id="floatingInput"
+            placeholder="number"
+          />
+          <label for="floatingInput">Height</label>
+        </div>
+        <div class="form-floating mb-2">
+          <input
+            type="text"
+            class="form-control"
+            id="floatingInput"
+            placeholder="name"
+          />
+          <label for="floatingInput">Address</label>
+        </div>
+        <button className="registerButton" onClick={changeData}>
+          Register
+        </button>
+        <button onClick={connectMetamask}>Connect to metamask</button>
+        <p>
+          <br />
+          {account}
+        </p>
+        <button onClick={connectContract}>Connect to Contract</button>
+        <br />
+        <button onClick={changeData}>Change</button>
+        <br />
+        <button onClick={getContractData}>Read from contract</button>
+        <br />
+        <p>{contractData}</p>
       </div>
-      <div class="form-floating mb-2">
-        <input type="text" class="form-control" id="floatingInput" placeholder="name" />
-        <label for="floatingInput">Patient Name</label>
-      </div>
-      <div class="form-floating mb-2">
-        <input type="number" class="form-control" id="floatingInput" placeholder="number" />
-        <label for="floatingInput">Age</label>
-      </div>
-      <div class="form-floating mb-2">
-        <input type="text" class="form-control" id="floatingInput" placeholder="name" />
-        <label for="floatingInput">Gender</label>
-      </div>
-      <div class="form-floating mb-2">
-        <input type="number" class="form-control" id="floatingInput" placeholder="number" />
-        <label for="floatingInput">Height</label>
-      </div>
-      <div class="form-floating mb-2">
-        <input type="text" class="form-control" id="floatingInput" placeholder="name" />
-        <label for="floatingInput">Address</label>
-      </div>
-      <button onClick={connectMetamask}>Connect to metamask</button>
-      <p><br />{account}</p>
-      <button onClick={connectContract}>Connect to Contract</button>
-      <br />
-      <button onClick={changeData}>Change</button>
-      <br />
-      <button onClick={getContractData}>Read from contract</button>
-      <br />
-      <p>{contractData}</p>
-      
-    </div>
       {/* <div>
         <h2>Register Patient</h2>
         <form>

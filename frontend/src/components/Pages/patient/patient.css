@@ -8,3 +8,11 @@
   width: 70%;
   /* margin-right: 200px; */
 } 
+
+.registerButton{
+  background-color: cadetblue;
+  height: 50px;
+  width: 100px;
+  border: solid black 2px;
+  border-radius: 20px;
+}
