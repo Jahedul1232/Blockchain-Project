@@ -1,0 +1,35 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.7;
+
+contract Todos {
+    struct Todo {
+        string name;
+        // bool completed;
+        string add;
+        uint age;
+        string gender;
+        uint height;
+    }
+    Todo[] public todos;
+
+    //calldata
+    function create(string memory _name, string memory _add , uint _age , string memory _gender, uint _height) public {
+        // 3 ways to initialize a struct
+        // - calling it like a function
+        // todos.push(Todo(_text, false));
+
+        // key value mapping
+        todos.push(Todo({name: _name, age: _age , add: _add, gender:_gender, height:_height}));
+
+        // // initialize an empty struct and then update it
+        // Todo memory todo;
+        // todo.text = _text;
+        // // todo.completed initialized to false
+
+        // todos.push(todo);
+    }
+    function get(uint _index) public view returns (string memory name, uint age, string memory add, string memory gender, uint height) {
+        Todo storage todo = todos[_index];
+        return (todo.name, todo.age, todo.add, todo.gender, todo.height);
+    }
+}
