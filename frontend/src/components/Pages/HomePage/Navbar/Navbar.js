@@ -1,5 +1,5 @@
 import "./Navbar.css";
-import Patient from "../../patient/patient";
+// import Patient from "../../patient/patient";
 import navImage from "../../../../assets/images.jpeg"
 
 

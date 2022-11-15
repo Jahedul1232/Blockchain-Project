@@ -1,3 +1,32 @@
 .login{
   margin-top: 10px;
 }
+
+
+.button_box{
+  height: 280px;
+  font-size: 20px;
+  border-radius: 20px;
+  background-color: #dee1d1;
+}
+
+.button_box:hover{
+  background-color: #666547;
+}
+
+.button_images{
+  padding-top: 30px;
+  max-height: 150px;
+  margin: auto auto;
+}
+
+.login_button{
+  margin-top: 70px;
+  font-size: 3rem;
+  /* border: solid 2px; */
+  border-radius: 5px;
+  font-size: 15px;
+  width: 150px;
+  height: 36px;
+  background-color: #dee1d1;
+}
