@@ -1,12 +1,16 @@
 import "./Body.css";
-import image from "../../../../assets/mobile_data.jpg"
-import left_image from "../../../../assets/node.png"
+import { useNavigate } from "react-router-dom";
+import image from "../../../../assets/mobile_data.jpg";
+import left_image from "../../../../assets/node.png";
 // import middle_image from "../../../../assets/Blockchain_image.jpg"
-import right_image from "../../../../assets/history1.png"
-import middle_image from "../../../../assets/blockchain.png"
-
+import right_image from "../../../../assets/history1.png";
+import middle_image from "../../../../assets/blockchain.png";
 
 function Body() {
+  const navigate = useNavigate();
+  const navigateTologin = () => {
+    navigate("#text");
+  };
   return (
     <div>
       <div class="flex flex-row">
@@ -21,7 +25,7 @@ function Body() {
             <br />A product developed by eSRD Lab
           </div>
           <div className="button">
-            <button>Get Started</button>
+            <button onClick={navigateTologin}>Get Started</button>
           </div>
         </div>
         <div class="basis-1/3">
@@ -31,7 +35,7 @@ function Body() {
         </div>
       </div>
       <div className="">
-        <div className="container-fluid boxes py-5 my-5" id="text">
+        <div className="container-fluid boxes py-5 my-5">
           <div className="row">
             <div className="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-4">
               <div className="left_one">
