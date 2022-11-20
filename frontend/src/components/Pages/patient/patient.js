@@ -1,6 +1,7 @@
 import { ethers } from "ethers";
 import { useState } from "react";
 import "./patient.css";
+// import { db } from "../../firebase";
 
 function Patient() {
   let [account, setAccount] = useState("");

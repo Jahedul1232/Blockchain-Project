@@ -8,16 +8,19 @@ import doctor_image from "../../../assets/doctor.png"
 import tele_image from "../../../assets/doctor (1).png"
 import his_image from "../../../assets/hospital (1).png"
 import Patient from "../patient/patient";
+import Firebase from "../../firebase/firebase";
 
 const LoginPage = () => {
-
   const navigate = useNavigate();
-  const navigateToPatient =()=>{
-    navigate('/patient');
-  }
-  const navigateToDoctor =()=>{
-    navigate('doctor');
-  }
+  const navigateToPatient = () => {
+    navigate("/patient");
+  };
+  const navigateToDoctor = () => {
+    navigate("doctor");
+  };
+  const navigateToFirebase = () => {
+    navigate("/firebase");
+  };
 
   return (
     <div className="login">
@@ -31,7 +34,7 @@ const LoginPage = () => {
             <div className="col-12 col-sm-6 col-md-3 col-lg-3">
               <div className="first_box button_box" onClick={navigateToPatient}>
                 <img src={patient_image} alt="" className="button_images"></img>
-                <button className="login_button" > Patient Login</button>
+                <button className="login_button"> Patient Login</button>
               </div>
             </div>
             <div className="col-12 col-sm-6 col-md-3 col-lg-3 ">
@@ -41,8 +44,11 @@ const LoginPage = () => {
               </div>
             </div>
             <div className="col-12 col-sm-6 col-md-3 col-lg-3 ">
-              <div className="third_box button_box" onClick={""}>
-              <img src={his_image} alt="" className="button_images"></img>
+              <div
+                className="third_box button_box"
+                onClick={navigateToFirebase}
+              >
+                <img src={his_image} alt="" className="button_images"></img>
                 <button className="login_button">HIS Login</button>
               </div>
             </div>
