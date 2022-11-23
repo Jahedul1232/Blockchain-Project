@@ -13,9 +13,9 @@ function App() {
       <HomePage />
       <Router>
         <div className="app">
-          {/* <Routes>
+          <Routes>
             <Route path="/" element={<LoginPage />}></Route>
-          </Routes> */}
+          </Routes>
           <Routes>
             <Route path="/patient" element={<Patient />}></Route>
           </Routes>
@@ -23,12 +23,11 @@ function App() {
             <Route path="/doctor" element={<Doctor />}></Route>
           </Routes>
           <Routes>
-            <Route path="/" element={<Firebase_db />}></Route>
+            <Route path="/firebase" element={<Firebase_db />}></Route>
           </Routes>
         </div>
       </Router>
     </div>
   );
 }
-
 export default App;

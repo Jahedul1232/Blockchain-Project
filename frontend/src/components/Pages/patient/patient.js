@@ -1,17 +1,20 @@
 import { ethers } from "ethers";
 import { useState } from "react";
 import "./patient.css";
-// import { db } from "../../firebase";
+import { db } from "../../../firabase_config";
+import { collection } from "firebase/firestore";
 
 function Patient() {
   let [account, setAccount] = useState("");
   let [contractData, setContractData] = useState();
+  const [user, setUser] = useState([]);
   const [patient_id, setPatient_id] = useState("");
   const [patient_name, setPatient_name] = useState("");
   const [patient_age, setPatient_age] = useState("");
   const [patient_gender, setPatient_gender] = useState("");
   const [patient_height, setPatient_height] = useState("");
   const [patient_address, setPatient_address] = useState("");
+  const connectionRef = collection(db, "patient_info");
 
   const handleEvent = (event) => {
     event.preventDefault();
@@ -37,6 +40,7 @@ function Patient() {
 
   let contract;
   const connectContract = async () => {
+    //----> Smart Contract Address <----
     const Address = "0x6B37C97CE2404A6AaB614E99102A15C0efe5d7f3";
     //"0xD698932D2992aFA8085aE923ef2738c37b7bA587";
     const ABI = [
@@ -158,26 +162,35 @@ function Patient() {
     console.log(contract.address);
   };
 
-  const changeData = async () => {
-    const tx = await contract.create(
-      patient_name,
-      patient_address,
-      patient_age,
-      patient_gender,
-      patient_height
-    );
-    const txReciept = await tx.wait();
-    console.log(txReciept);
-  };
+  // const changeData = async () => {
+  //   const tx = await contract.create(
+  //     patient_name,
+  //     patient_address,
+  //     patient_age,
+  //     patient_gender,
+  //     patient_height
+  //   );
+  //   const txReciept = await tx.wait();
+  //   console.log(txReciept);
+  // };
 
   const getContractData = async () => {
-    const phrase = await contract.get(12);
+    //   ---------- > Connect to metamask  <-------------
+    connectMetamask();
+    // --------> Connection with Contract <---------------
+    connectContract();
+    // Reading from blockchain
+    const phrase = await contract.get(17);
     console.log(phrase[0]);
     console.log(phrase[1]);
     console.log(phrase[2]);
     console.log(phrase[3]);
     console.log(phrase[4]);
     setPatient_name(phrase[0]);
+    setPatient_age(phrase[1]);
+    setPatient_address(phrase[2]);
+    setPatient_gender(phrase[3]);
+    setPatient_height(phrase[4]);
   };
 
   // const changeData1 = async () => {
@@ -191,7 +204,7 @@ function Patient() {
       {/* <p>{contractData[1]}</p> */}
       <form onSubmit={handleEvent}>
         <div className="inputs">
-          <h2>Register Patient</h2>
+          <h2>View Patient Record</h2>
           <br />
           <div class="row form-floating mb-2">
             <input
@@ -261,19 +274,21 @@ function Patient() {
           </div>
         </div>
 
-        <button className="registerButton" onClick={changeData}>
+        {/* <button className="registerButton" onClick={changeData}>
           Register
-        </button>
-        <button onClick={connectMetamask}>Connect to metamask</button>
+        </button> */}
+        {/* <button onClick={connectMetamask}>Connect to metamask</button>
         <p>
           <br />
           {account}
         </p>
         <button onClick={connectContract}>Connect to Contract</button>
+        <br /> */}
+        {/* <button onClick={changeData}>Change</button> */}
         <br />
-        <button onClick={changeData}>Change</button>
-        <br />
-        <button onClick={getContractData}>Read from contract</button>
+        <button className="registerButton" onClick={getContractData}>
+          Retrive Data
+        </button>
         <br />
         {/* <p>{patient_name}</p> */}
       </form>

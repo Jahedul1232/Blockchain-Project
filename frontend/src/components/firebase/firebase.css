@@ -1,0 +1,11 @@
+.cloud_data{
+  border:solid 2px black;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 10px;
+}
+
+.forms{
+  padding: 100px 100px;
+  position: inherit;
+}

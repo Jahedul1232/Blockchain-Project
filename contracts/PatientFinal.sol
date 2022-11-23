@@ -19,7 +19,7 @@ contract Todos {
         // todos.push(Todo(_text, false));
 
         // key value mapping
-        todos.push(Todo({name: _name, age: _age , add: _add, gender:_gender, height:_height}));
+        todos.push(Todo({name: _name, age: _age ,  gender:_gender, height:_height,add: _add}));
 
         // // initialize an empty struct and then update it
         // Todo memory todo;
@@ -28,8 +28,8 @@ contract Todos {
 
         // todos.push(todo);
     }
-    function get(uint _index) public view returns (string memory name, uint age, string memory add, string memory gender, uint height) {
+    function get(uint _index) public view returns (string memory name, uint age, string memory gender, uint height, string memory add) {
         Todo storage todo = todos[_index];
-        return (todo.name, todo.age, todo.add, todo.gender, todo.height);
+        return (todo.name, todo.age, todo.gender, todo.height, todo.add);
     }
 }
