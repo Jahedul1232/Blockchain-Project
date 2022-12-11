@@ -5,7 +5,7 @@ import Navbar from "./components/Pages/HomePage/Navbar/Navbar";
 import HomePage from "./components/Pages/HomePage/Homepage";
 // import { useNavigate } from "react-router-dom";
 import Patient from "./components/Pages/patient/patient";
-import Firebase_db from "./components/firebase/firebase";
+import Firebase_db from "./components/firebase/firebase";   
 
 function App() {
   return (

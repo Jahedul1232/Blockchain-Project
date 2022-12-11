@@ -1,5 +1,9 @@
 import { ethers } from "ethers";
 import { useState } from "react";
+import "./doctor.css";
+// import { db } from "../../firabase_config";
+import { db } from "../../../firabase_config";
+import { collection, getDocs, addDoc, doc } from "firebase/firestore";
 
 function Patient() {
   let [account, setAccount] = useState("");
@@ -10,17 +14,58 @@ function Patient() {
   const [patient_gender, setPatient_gender] = useState("");
   const [patient_height, setPatient_height] = useState("");
   const [patient_address, setPatient_address] = useState("");
+  const connectionRef = collection(db, "user"); //Firebase connection
+  var data = [
+    {
+      name: patient_name,
+      age: patient_age,
+      gender: patient_gender,
+      height: patient_height,
+      address: patient_address,
+    },
+  ];
 
   const handleEvent = (event) => {
     event.preventDefault();
-    // alert(`${patient_name}'s record is saved`);
-    // console.log(
-    //   patient_name,
-    //   patient_address,
-    //   patient_age,
-    //   patient_gender,
-    //   patient_id
+    //    alert(`${patient_name}'s record is saved`);
+    //    console.log(
+    //    patient_name,
+    //    patient_address,
+    //    patient_age,
+    //    patient_gender,
+    //    patient_id
     // );
+  };
+
+  const firebaseStore = async (secretKey, ciphertext) => {
+    console.log("inside firebase");
+    console.log(`secretKey is ${secretKey} data is ${ciphertext}`);
+    await addDoc(connectionRef, { secKey: secretKey, encryptData: ciphertext });
+    // console.log(`secreat key is ${secretKey} and data is ${ciphertext}`);
+    console.log("after encryption in firebase");
+  };
+
+  const SearchableEncryption = (params) => {
+    var crypto = require("crypto-js");
+    const secretKey = "my-secret-key@123";
+    var ciphertext = crypto.AES.encrypt(
+      JSON.stringify(data),
+      secretKey
+    ).toString();
+    //log encrypted data
+    console.log("Encrypt Data -");
+    console.log(ciphertext);
+
+    console.log("before calling firebase");
+    firebaseStore(secretKey, ciphertext);
+
+    // Decrypt
+    var bytes = crypto.AES.decrypt(ciphertext, secretKey);
+    var decryptedData = JSON.parse(bytes.toString(crypto.enc.Utf8));
+
+    //log decrypted Data
+    console.log("decrypted Data -");
+    console.log(decryptedData);
   };
 
   const { ethereum } = window;
@@ -166,8 +211,9 @@ function Patient() {
       patient_gender,
       patient_height
     );
-    const txReciept = await tx.wait();
-    console.log(txReciept);
+    SearchableEncryption();
+    // const txReciept = await tx.wait();
+    // console.log(txReciept);
   };
 
   const getContractData = async () => {
@@ -187,9 +233,9 @@ function Patient() {
   };
 
   // const changeData1 = async () => {
-  //   const tx = await contract.set_reta("hi there");
-  //   const txReciept = await tx.wait();
-  //   console.log(txReciept);
+  //    const tx = await contract.set_reta("hi there");
+  //    const txReciept = await tx.wait();
+  //    console.log(txReciept);
   // };
 
   return (
@@ -281,7 +327,7 @@ function Patient() {
           Save
         </button>
         <br />
-        <button className="button_des" onClick={getContractData}>
+        <button className="doc_button_des" onClick={getContractData}>
           Read from contract
         </button>
         <br />
@@ -290,5 +336,5 @@ function Patient() {
     </div>
   );
 }
-
+// console.log("here is the data goes..")
 export default Patient;

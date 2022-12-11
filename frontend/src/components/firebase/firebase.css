@@ -6,6 +6,14 @@
 }
 
 .forms{
-  padding: 100px 100px;
+  padding: 50px 100px;
   position: inherit;
+}
+
+.save_button_design{
+  border: solid black 2px;
+  padding: 10px 25px;
+  border-radius: 7px;
+  background-color: #06909e;
+  margin: 5px;
 }

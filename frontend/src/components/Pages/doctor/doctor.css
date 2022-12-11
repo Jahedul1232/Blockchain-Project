@@ -1,5 +1,7 @@
-.button_des{
-  border: solid 10px black;
-  padding: 20px;
-  margin: 20px;
+.doc_button_des{
+  margin: 10px;
+  padding: 10px;
+  border: solid black 2px;
+  border-radius: 7px;
+  background-color: #06909e;
 }

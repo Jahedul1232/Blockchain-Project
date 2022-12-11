@@ -3,8 +3,19 @@ import { useState } from "react";
 import "./patient.css";
 import { db } from "../../../firabase_config";
 import { collection } from "firebase/firestore";
+// import sha256 from "crypto-js/sha256";
 
 function Patient() {
+  // const hashDigest = sha256("nonce" + "message");
+
+  // var mykey = crypto.createCipher("aes-128-cbc", "mypassword");
+  // var mystr = mykey.update("abc", "utf8", "hex");
+  // mystr += mykey.final("hex");
+
+  // console.log(mystr);
+  // console.log("here is the line");
+  // console.log(hashDigest);
+
   let [account, setAccount] = useState("");
   let [contractData, setContractData] = useState();
   const [user, setUser] = useState([]);
@@ -180,7 +191,7 @@ function Patient() {
     // --------> Connection with Contract <---------------
     connectContract();
     // Reading from blockchain
-    const phrase = await contract.get(17);
+    const phrase = await contract.get(30);
     console.log(phrase[0]);
     console.log(phrase[1]);
     console.log(phrase[2]);
@@ -206,7 +217,7 @@ function Patient() {
         <div className="inputs">
           <h2>View Patient Record</h2>
           <br />
-          <div class="row form-floating mb-2">
+          {/* <div class="row form-floating mb-2">
             <input
               type="text"
               value={patient_id}
@@ -216,7 +227,7 @@ function Patient() {
               placeholder="Patient id"
             />
             <label for="floatingInput">Patient Id</label>
-          </div>
+          </div> */}
           <div class="form-floating mb-2">
             <input
               value={patient_name}

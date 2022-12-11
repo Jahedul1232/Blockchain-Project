@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import "./firebase.css";
+// import "./doctor.css";
 import { db } from "../../firabase_config";
 import { collection, getDocs, addDoc, doc } from "firebase/firestore";
 
@@ -7,10 +8,10 @@ function Firebase_db() {
   const [users, setUsers] = useState([]);
   const [newName, setNewName] = useState("");
   const [newAge, setNewAge] = useState(0);
-  const [newAddress, setnewAddress] = useState("");
+  const [newAddress, setnewAddress] = useState("");    
   const [newGender, setnewGender] = useState("");
   const [newHeight, setnewHeight] = useState(0);
-  const connectionRef = collection(db, "patient_info");
+  const connectionRef = collection(db, "user");
   const createUser = async () => {
     await addDoc(connectionRef, {
       name: newName,
@@ -24,7 +25,7 @@ function Firebase_db() {
   const getUsers = async () => {
     const data = await getDocs(connectionRef);
     setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-    console.log(data);
+    // console.log(data);
   };
 
   // useEffect(() => {
@@ -174,17 +175,23 @@ function Firebase_db() {
         }}
       ></input>
       <br /> */}
-      <button onClick={createUser}>Save</button>
+      <button className="save_button_design" onClick={createUser}>
+        Save
+      </button>
       <br />
-      <button onClick={getUsers}>show Users</button>
+      <button className="save_button_design" onClick={getUsers}>
+        show Users
+      </button>
       {users.map((user) => {
         return (
           <div className="cloud_data">
-            <h3>Name:{user.name}</h3>
+            <h3>SecretKey: {user.secKey}</h3>
+            <p>Data: {user.encryptData}</p>
+            {/* <h3>Name:{user.name}</h3>
             <p>Age:{user.age}</p>
             <p>Address:{user.address}</p>
             <p>Gender:{user.gender}</p>
-            <p>Height:{user.height}</p>
+            <p>Height:{user.height}</p> */}
           </div>
         );
       })}
