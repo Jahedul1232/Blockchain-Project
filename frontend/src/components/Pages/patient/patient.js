@@ -191,7 +191,7 @@ function Patient() {
     // --------> Connection with Contract <---------------
     connectContract();
     // Reading from blockchain
-    const phrase = await contract.get(30);
+    const phrase = await contract.get(31);
     console.log(phrase[0]);
     console.log(phrase[1]);
     console.log(phrase[2]);

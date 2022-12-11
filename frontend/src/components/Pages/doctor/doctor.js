@@ -219,7 +219,7 @@ function Patient() {
   const getContractData = async () => {
     connectMetamask();
     connectContract();
-    const phrase = await contract.get(20);
+    const phrase = await contract.get(35);
     console.log(phrase[0]);
     console.log(phrase[1]);
     console.log(phrase[2]);
