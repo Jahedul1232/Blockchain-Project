@@ -6,6 +6,7 @@ import HomePage from "./components/Pages/HomePage/Homepage";
 // import { useNavigate } from "react-router-dom";
 import Patient from "./components/Pages/patient/patient";
 import Firebase_db from "./components/firebase/firebase";   
+import PatientLogin from "./components/Login/patientLogin/patientLog";
 
 function App() {
   return (
@@ -24,6 +25,9 @@ function App() {
           </Routes>
           <Routes>
             <Route path="/firebase" element={<Firebase_db />}></Route>
+          </Routes>
+          <Routes>
+            <Route path="/patientLogin" element={<PatientLogin />}></Route>
           </Routes>
         </div>
       </Router>

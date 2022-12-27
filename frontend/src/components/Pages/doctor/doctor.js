@@ -3,7 +3,7 @@ import { useState } from "react";
 import "./doctor.css";
 // import { db } from "../../firabase_config";
 import { db } from "../../../firabase_config";
-import { collection, getDocs, addDoc, doc } from "firebase/firestore";
+import { collection, getDocs, addDoc, setDoc, doc } from "firebase/firestore";
 
 function Patient() {
   let [account, setAccount] = useState("");
@@ -40,10 +40,16 @@ function Patient() {
   const firebaseStore = async (secretKey, ciphertext) => {
     console.log("inside firebase");
     console.log(`secretKey is ${secretKey} data is ${ciphertext}`);
-    await addDoc(connectionRef, { secKey: secretKey, encryptData: ciphertext });
+    await addDoc(connectionRef, {
+      secKey: secretKey,
+      encryptData: ciphertext,
+      projectID: connectionRef.id,
+    });
+    console.log("stored data");
+    // console.log(`projectID is ${connectionRef.projectID}`);
     // console.log(`secreat key is ${secretKey} and data is ${ciphertext}`);
     console.log("after encryption in firebase");
-  };
+  };;
 
   const SearchableEncryption = (params) => {
     var crypto = require("crypto-js");
@@ -198,7 +204,7 @@ function Patient() {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     contract = new ethers.Contract(Address, ABI, signer);
-    console.log(contract.address);
+    // console.log(contract.address);
   };
 
   const changeData = async () => {
@@ -219,12 +225,14 @@ function Patient() {
   const getContractData = async () => {
     connectMetamask();
     connectContract();
-    const phrase = await contract.get(35);
-    console.log(phrase[0]);
-    console.log(phrase[1]);
-    console.log(phrase[2]);
-    console.log(phrase[3]);
-    console.log(phrase[4]);
+    const phrase = await contract.get(patient_id);
+    console.log(phrase);
+    if (phrase[0] === "") console.log("This is an empty index");
+    // console.log(phrase[0]);
+    // console.log(phrase[1]);
+    // console.log(phrase[2]);
+    // console.log(phrase[3]);
+    // console.log(phrase[4]);
     setPatient_name(phrase[0]);
     setPatient_age(phrase[1]);
     setPatient_address(phrase[2]);
@@ -243,7 +251,7 @@ function Patient() {
       {/* <p>{contractData[1]}</p> */}
       <form onSubmit={handleEvent}>
         <div className="inputs">
-          <h2>Doctor's View</h2>
+          <h2>Smart Contract for Patient</h2>
           <br />
           <div class="row form-floating mb-2">
             <input

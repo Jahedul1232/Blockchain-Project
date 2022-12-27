@@ -8,7 +8,7 @@ function Firebase_db() {
   const [users, setUsers] = useState([]);
   const [newName, setNewName] = useState("");
   const [newAge, setNewAge] = useState(0);
-  const [newAddress, setnewAddress] = useState("");    
+  const [newAddress, setnewAddress] = useState("");
   const [newGender, setnewGender] = useState("");
   const [newHeight, setnewHeight] = useState(0);
   const connectionRef = collection(db, "user");
@@ -19,23 +19,38 @@ function Firebase_db() {
       address: newAddress,
       gender: newGender,
       height: Number(newHeight),
-    });
+      projectID: connectionRef.id,
+    })
+      .then((connectionRef) => {
+        alert("Data successfully Submitted");
+      })
+      .catch((error) => console.log("Error in Adding Data ", error));
   };
+
+  // useEffect(() => {
+  //   (async () => {
+  //     const colRef = collection(db, "user");
+  //     const snapshot = await getDocs(colRef);
+  //     const docs = snapshot.docs.map((doc) => {
+  //       const data = doc.data();
+  //       data.id = doc.id;
+  //       // console.log(data.id);
+
+  //       return data;
+  //     });
+  //     console.log(docs);
+  //   })();
+  // }, []);
 
   const getUsers = async () => {
     const data = await getDocs(connectionRef);
     setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-    // console.log(data);
+    // console.log(users);
+    // console.log(`id is ${data.snapshot}`);
+    // console.log("users are  : ", users[0]);
+    // console.log(data._snapshot.docChanges[4].doc.key.path.segments[6]);
   };
 
-  // useEffect(() => {
-  //   const getUsers = async () => {
-  //     const data = await getDocs(connectionRef);
-  //     setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-  //     console.log(data);
-  //   };
-  //   getUsers();
-  // }, []);
   return (
     <div>
       <h2>Welcome to firebase database</h2>
@@ -131,50 +146,8 @@ function Firebase_db() {
               required
             />
           </div>
-          {/* <button
-            onClick={createUser}
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >
-            Save
-          </button> */}
         </form>
       </div>
-
-      {/* <input
-        placeholder="Name.."
-        onChange={(event) => {
-          setNewName(event.target.value);
-        }}
-      />
-      <input
-        type="number"
-        placeholder="age.."
-        onChange={(event) => {
-          setNewAge(event.target.value);
-        }}
-      />
-      <br />
-      <input
-        placeholder="patientAddress"
-        onChange={(event) => {
-          setnewAddress(event.target.value);
-        }}
-      ></input>
-      <br />
-      <input
-        placeholder="Gender"
-        onChange={(event) => {
-          setnewGender(event.target.value);
-        }}
-      ></input>
-      <input
-        type="number"
-        placeholder="Height"
-        onChange={(event) => {
-          setnewHeight(event.target.value);
-        }}
-      ></input>
-      <br /> */}
       <button className="save_button_design" onClick={createUser}>
         Save
       </button>
@@ -187,6 +160,7 @@ function Firebase_db() {
           <div className="cloud_data">
             <h3>SecretKey: {user.secKey}</h3>
             <p>Data: {user.encryptData}</p>
+            <p>PatientID: {user.id}</p>
             {/* <h3>Name:{user.name}</h3>
             <p>Age:{user.age}</p>
             <p>Address:{user.address}</p>

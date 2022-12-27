@@ -19,7 +19,7 @@ contract Todos {
         // todos.push(Todo(_text, false));
 
         // key value mapping
-        todos.push(Todo({name: _name, age: _age ,  gender:_gender, height:_height,add: _add}));
+        todos.push(Todo({name: _name, age: _age ,  gender:_gender, height:_height, add: _add}));
 
         // // initialize an empty struct and then update it
         // Todo memory todo;

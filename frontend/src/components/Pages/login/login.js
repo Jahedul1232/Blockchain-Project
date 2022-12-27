@@ -13,7 +13,8 @@ import Firebase from "../../firebase/firebase";
 const LoginPage = () => {
   const navigate = useNavigate();
   const navigateToPatient = () => {
-    navigate("/patient");
+    // navigate("/patient");
+    navigate("/patientLogin");
   };
   const navigateToDoctor = () => {
     navigate("doctor");
