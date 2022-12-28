@@ -1,27 +1,52 @@
 import React, { Component, useState } from "react";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../../firabase_config";
 import { useNavigate } from "react-router-dom";
+import LoginLandingPage from "../../Pages/login/loginLanding";
 import "./patientLog.css";
 
 const PatientLogin = () => {
-  const [email, setEmail] = useState();
-  const [pass, setPass] = useState();
+  const [logEmail, setLogEmail] = useState();
+  const [logPass, setLogPass] = useState();
   const navigate = useNavigate();
+  // const [pass, setPass] = useState();
+
+  const HandleLoging = (e) => {
+    e.preventDefault();
+
+    signInWithEmailAndPassword(auth, logEmail, logPass)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        const id = 5;
+        console.log(user);
+        alert("Successfully logged in");
+        navigate("/loginLanding", { state: { id: user.uid } });
+      })
+      .catch((error) => {
+        console.log("error is ", error.message);
+        alert(`${error}`);
+      });
+  };
+
+  // const Login = async () => {
+  //   try {
+  //     const user = await signInWithEmailAndPassword(auth, logEmail, logPass);
+  //     console.log("logged in");
+  //   } catch (error) {
+  //     console.log("error is ", error.message);
+  //   }
+  // };
 
   function buttonCall() {
     const navigateToPatient = () => {
-      navigate("/patient");
-      // navigate("/patientLogin");
+      navigate("/patientRegistration");
     };
-    console.log(`email is ${email}`);
-    console.log(`pass is  ${pass}`);
-
-    if (email === "jahedulmd1232@gmail.com")
-      if (pass === "123456") navigate("/patient");
-      else console.log("doesn't macthed");
+    navigateToPatient();
   }
 
   return (
     <div>
+      <h2>Welcome to Patient Login Page</h2>
       <div className="canvas">
         <section class="h-screen">
           <div class="px-6 h-full text-gray-800">
@@ -44,7 +69,7 @@ const PatientLogin = () => {
                       type="text"
                       class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                       id="exampleFormControlInput2"
-                      onChange={(e) => setEmail(e.target.value)}
+                      onChange={(e) => setLogEmail(e.target.value)}
                       // onClick={navigateToPatient}
                       placeholder="Email address"
                     />
@@ -56,24 +81,24 @@ const PatientLogin = () => {
                       type="password"
                       class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                       id="exampleFormControlInput2"
-                      onChange={(e) => setPass(e.target.value)}
+                      onChange={(e) => setLogPass(e.target.value)}
                       placeholder="Password"
                     />
                   </div>
 
                   <div class="flex justify-between items-center mb-6">
                     <div class="form-group form-check">
-                      <input
+                      {/* <input
                         type="checkbox"
                         class="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
                         id="exampleCheck2"
-                      />
-                      <label
+                      /> */}
+                      {/* <label
                         class="form-check-label inline-block text-gray-800"
                         for="exampleCheck2"
                       >
                         Remember me
-                      </label>
+                      </label> */}
                     </div>
                     <a href="#!" class="text-gray-800">
                       Forgot password?
@@ -84,7 +109,7 @@ const PatientLogin = () => {
                     <button
                       type="button"
                       class="inline-block px-7 py-3 bg-blue-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
-                      onClick={buttonCall}
+                      onClick={HandleLoging}
                     >
                       Login
                     </button>
@@ -93,6 +118,7 @@ const PatientLogin = () => {
                       <a
                         href="#!"
                         class="text-red-600 hover:text-red-700 focus:text-red-700 transition duration-200 ease-in-out"
+                        onClick={buttonCall}
                       >
                         Register
                       </a>
@@ -106,5 +132,5 @@ const PatientLogin = () => {
       </div>
     </div>
   );
-};
+};;;;;;;;;;;;;;;;;;;;;;;
 export default PatientLogin;

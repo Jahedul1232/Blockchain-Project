@@ -7,6 +7,8 @@ import HomePage from "./components/Pages/HomePage/Homepage";
 import Patient from "./components/Pages/patient/patient";
 import Firebase_db from "./components/firebase/firebase";   
 import PatientLogin from "./components/Login/patientLogin/patientLog";
+import PatientRegistration from "./components/Registration/Patient/patientReg";
+import LoginLandingPage from "./components/Pages/login/loginLanding";
 
 function App() {
   return (
@@ -28,6 +30,15 @@ function App() {
           </Routes>
           <Routes>
             <Route path="/patientLogin" element={<PatientLogin />}></Route>
+          </Routes>
+          <Routes>
+            <Route
+              path="/patientRegistration"
+              element={<PatientRegistration />}
+            ></Route>
+          </Routes>
+          <Routes>
+            <Route path="/loginLanding" element={<LoginLandingPage />}></Route>
           </Routes>
         </div>
       </Router>
