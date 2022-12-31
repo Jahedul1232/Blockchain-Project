@@ -29,7 +29,7 @@ contract Todos {
         // todos.push(todo);
     }
     function get(uint _index) public view returns (string memory name, uint age, string memory gender, uint height, string memory add) {
-        Todo storage todo = todos[_index];
+        Todo storage todo = todos[_index];   
         return (todo.name, todo.age, todo.gender, todo.height, todo.add);
     }
 }

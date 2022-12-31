@@ -1,4 +1,5 @@
 import React, { Component, useState } from "react";
+import { ethers } from "ethers";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../../firabase_config";
 import { useNavigate } from "react-router-dom";
@@ -13,6 +14,7 @@ import { db } from "../../../firabase_config";
 // import "./patientLog.css";
 
 const PatientRegistration = () => {
+  let [account, setAccount] = useState("");
   const [name, setName] = useState();
   const [age, setAge] = useState();
   const [gender, setGender] = useState();
@@ -20,43 +22,150 @@ const PatientRegistration = () => {
   const [address, setAddress] = useState();
   const [regEmail, setRegEmail] = useState();
   const [regPass, setRegPass] = useState();
+  const navigate = useNavigate();
+  const connectionRef = collection(db, "records"); //Firebase connection
+  const { ethereum } = window;
 
-  // const [pass, setPass] = useState();
-  // const navigate = useNavigate();
+  var data = [
+    {
+      name: name,
+      age: age,
+      gender: gender,
+      height: height,
+      address: address,
+    },
+  ];
+
+  const firebaseStore = async (secretKey, ciphertext, params) => {
+    console.log("inside firebase");
+    console.log(`secretKey is ${secretKey} data is ${ciphertext}`);
+    await setDoc(doc(db, "records", params), {
+      data: ciphertext,
+      key: secretKey,
+      timeStamp: serverTimestamp(),
+    });
+    console.log("stored data");
+    alert("Data stored in firebase");
+    setName("");
+    setAddress("");
+    setAge("");
+    setGender("");
+    setHeight("");
+    setRegEmail("");
+    setRegPass("");
+  };
+
+  const connectMetamask = async () => {
+    if (window.ethereum !== "undefined") {
+      const accounts = await ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      setAccount(accounts[0]);
+    }
+  };
+
+  const SearchableEncryption = (params) => {
+    var crypto = require("crypto-js");
+    const secretKey = "my-secret-key@123";
+    var ciphertext = crypto.AES.encrypt(
+      JSON.stringify(data),
+      secretKey
+    ).toString();
+
+    firebaseStore(secretKey, ciphertext, params);
+
+    // Decrypt
+    var bytes = crypto.AES.decrypt(ciphertext, secretKey);
+    var decryptedData = JSON.parse(bytes.toString(crypto.enc.Utf8));
+
+    //log decrypted Data
+    // console.log("decrypted Data -");
+    // console.log(decryptedData);
+
+    return secretKey;
+  };
+
+  let contract;
+  const connectContract = async () => {
+    const Address = "0xa0820492024125F0f0F74e874eadd96a4909D353";
+    //"0xD698932D2992aFA8085aE923ef2738c37b7bA587";
+    const ABI = [
+      {
+        inputs: [],
+        name: "retrieve",
+        outputs: [
+          {
+            internalType: "string",
+            name: "",
+            type: "string",
+          },
+        ],
+        stateMutability: "view",
+        type: "function",
+      },
+      {
+        inputs: [
+          {
+            internalType: "string",
+            name: "_value",
+            type: "string",
+          },
+        ],
+        name: "store",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+      },
+    ];
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    contract = new ethers.Contract(Address, ABI, signer);
+    // console.log(contract.address);
+  };
 
   const handleReg = async (e) => {
     e.preventDefault();
 
+    //Authentication........
     try {
       const res = await createUserWithEmailAndPassword(auth, regEmail, regPass);
-
-      console.log(res);
+      const id = res.user.uid;
+      // console.log(res);
       // if (res) console.log("data not saved");
       // else console.log("data saved");
-      await setDoc(doc(db, "records", res.user.uid), {
-        name: name,
-        age: age,
-        gender: gender,
-        height: height,
-        address: address,
-        timeStamp: serverTimestamp(),
-      });
+      // await setDoc(doc(db, "records", res.user.uid), {
+      //   name: name,
+      //   age: age,
+      //   gender: gender,
+      //   height: height,
+      //   address: address,
+      //   timeStamp: serverTimestamp(),
+      // });
 
+      //Encrypting values and storing values in firebase......
+      const keyValue = SearchableEncryption(id);
+      connectMetamask();
+      connectContract();
+      // console.log("data is : ", SearchableEncryption(id));
+      const tx = await contract.store(keyValue);
       alert("Successfully Registered");
+      navigate("/loginLanding", { state: { userID: id } });
+
+      // const phrase = await contract.retrieve();
+      // console.log("retrieve value is ", phrase);
     } catch (error) {
       alert(`${error}`);
-      // console.log("error is ", error.message);
     }
   };
 
-  const Register = async () => {};
+  // const Register = async () => {};
 
-  function buttonCall() {
-    // const navigateToPatient = () => {
-    //   navigate("/patient");
-    //   // navigate("/patientLogin");
-    // };
-  }
+  // function buttonCall() {
+  //   // const navigateToPatient = () => {
+  //   //   navigate("/patient");
+  //   //   // navigate("/patientLogin");
+  //   // };
+  // }
 
   return (
     <div>
@@ -83,6 +192,7 @@ const PatientRegistration = () => {
                       class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                       id="exampleFormControlInput2"
                       onChange={(e) => setName(e.target.value)}
+                      value={name}
                       // onClick={navigateToPatient}
                       placeholder="Name"
                     />
@@ -95,6 +205,7 @@ const PatientRegistration = () => {
                       class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                       id="exampleFormControlInput2"
                       onChange={(e) => setAge(e.target.value)}
+                      value={age}
                       // onClick={navigateToPatient}
                       placeholder="Age"
                     />
@@ -107,6 +218,7 @@ const PatientRegistration = () => {
                       class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                       id="exampleFormControlInput2"
                       onChange={(e) => setGender(e.target.value)}
+                      value={gender}
                       // onClick={navigateToPatient}
                       placeholder="Gender"
                     />
@@ -119,6 +231,7 @@ const PatientRegistration = () => {
                       class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                       id="exampleFormControlInput2"
                       onChange={(e) => setHeight(e.target.value)}
+                      value={height}
                       // onClick={navigateToPatient}
                       placeholder="Height"
                     />
@@ -131,6 +244,7 @@ const PatientRegistration = () => {
                       class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                       id="exampleFormControlInput2"
                       onChange={(e) => setAddress(e.target.value)}
+                      value={address}
                       // onClick={navigateToPatient}
                       placeholder="Address"
                     />
@@ -143,6 +257,7 @@ const PatientRegistration = () => {
                       class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                       id="exampleFormControlInput2"
                       onChange={(e) => setRegEmail(e.target.value)}
+                      value={regEmail}
                       // onClick={navigateToPatient}
                       placeholder="Email address"
                     />
@@ -155,6 +270,7 @@ const PatientRegistration = () => {
                       class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                       id="exampleFormControlInput2"
                       onChange={(e) => setRegPass(e.target.value)}
+                      value={regPass}
                       placeholder="Password"
                     />
                   </div>
@@ -195,5 +311,5 @@ const PatientRegistration = () => {
       </div>
     </div>
   );
-};
+};;;;;;
 export default PatientRegistration;

@@ -17,13 +17,16 @@ const PatientLogin = () => {
     signInWithEmailAndPassword(auth, logEmail, logPass)
       .then((userCredential) => {
         const user = userCredential.user;
-        const id = 5;
-        console.log(user);
+        const userID = user.uid;
+        // const id = 5;
+        // console.log(user);
         alert("Successfully logged in");
-        navigate("/loginLanding", { state: { id: user.uid } });
+        navigate("/loginLanding", { state: { userID: userID } });
       })
       .catch((error) => {
         console.log("error is ", error.message);
+        setLogEmail("");
+        setLogPass("");
         alert(`${error}`);
       });
   };
@@ -70,6 +73,7 @@ const PatientLogin = () => {
                       class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                       id="exampleFormControlInput2"
                       onChange={(e) => setLogEmail(e.target.value)}
+                      value={logEmail}
                       // onClick={navigateToPatient}
                       placeholder="Email address"
                     />
@@ -82,6 +86,7 @@ const PatientLogin = () => {
                       class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                       id="exampleFormControlInput2"
                       onChange={(e) => setLogPass(e.target.value)}
+                      value={logPass}
                       placeholder="Password"
                     />
                   </div>
