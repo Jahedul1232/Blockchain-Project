@@ -9,6 +9,8 @@ import Firebase_db from "./components/firebase/firebase";
 import PatientLogin from "./components/Login/patientLogin/patientLog";
 import PatientRegistration from "./components/Registration/Patient/patientReg";
 import LoginLandingPage from "./components/Pages/login/loginLanding";
+import DoctorLoginPage from "./components/Pages/doctor/doctorLogin";
+import DoctorsLandingPage from "./components/Pages/doctor/doctorsLandingPage";
 
 function App() {
   return (
@@ -39,6 +41,19 @@ function App() {
           </Routes>
           <Routes>
             <Route path="/loginLanding" element={<LoginLandingPage />}></Route>
+          </Routes>
+          <Routes>
+            <Route
+              path="/doctorLoginPage"
+              element={<DoctorLoginPage />}
+            ></Route>
+          </Routes>
+          <Routes>
+            <Route
+              path="/doctorsLandingPage"
+                     doctorsLandingPage
+              element={<DoctorsLandingPage />}
+            ></Route>
           </Routes>
         </div>
       </Router>

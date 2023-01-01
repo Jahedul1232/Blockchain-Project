@@ -1,0 +1,18 @@
+.doctorsbox{
+  margin-left: 600px;
+  margin-top: 100px;
+  height: 600px;
+  width: 500px;
+  border: 2px solid black;
+  border-radius: 20px;
+  background-color: blanchedalmond;
+  box-shadow: 50px;
+}
+
+
+.tokenButton{
+   padding: 10px 20px;
+  border: 2px solid black;
+  border-radius: 10px;
+  background-color: aqua;
+}

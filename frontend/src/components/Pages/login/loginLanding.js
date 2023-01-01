@@ -1,13 +1,40 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import { useLocation } from "react-router-dom";
-import { doc, getDoc, getDocFromCache } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  setDoc,
+  getDocFromCache,
+  serverTimestamp,
+} from "firebase/firestore";
 import { db } from "../../../firabase_config";
 import { async } from "@firebase/util";
 import "./loginLanding.css";
 
+let token = "";
+const ShareData = async (ciphertext, key, token) => {
+  // console.log(makeid(6));
+  await setDoc(doc(db, "temporary", token), {
+    data: ciphertext,
+    key: key,
+    timeStamp: serverTimestamp(),
+  });
+  console.log("From outside token is ", token);
+  // setToken(token);
+  // <div>
+  //   <h3>Anayone can Read your Data with the token.</h3>
+  // </div>;
+  console.log("here");
+  return (
+    <div>
+      <h3>Anayone can Read your Data with the token.</h3>
+      {/* <div>Token is : {token}</div> */}
+    </div>
+  );
+};
+
 const LoginLandingPage = () => {
-  // const [user, setUser] = useState();
   let [account, setAccount] = useState("");
   const [ciphertext, setCiphertext] = useState("");
   const [key, setKey] = useState("");
@@ -16,11 +43,32 @@ const LoginLandingPage = () => {
   const [gender, setGender] = useState("");
   const [add, setAddress] = useState("");
   const [height, setHeight] = useState("");
+  const [token, setToken] = useState("");
+  // const [genete, setGenerate] = useState("");
+  // const [user, setUser] = useState();
 
   const { ethereum } = window;
   const location = useLocation();
   const docRef = doc(db, "records", location.state.userID);
   let contract;
+
+  useEffect(() => {
+    function makeid(length) {
+      var result = "";
+      var characters =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      var charactersLength = characters.length;
+      for (var i = 0; i < length; i++) {
+        result += characters.charAt(
+          Math.floor(Math.random() * charactersLength)
+        );
+      }
+      console.log("Token is : ", result);
+      return result;
+    }
+    setToken(makeid(6));
+  }, []);
+
   const connectMetamask = async () => {
     if (window.ethereum !== "undefined") {
       const accounts = await ethereum.request({
@@ -72,6 +120,7 @@ const LoginLandingPage = () => {
     const phrase = await contract.retrieve();
     console.log("from ReadBlockchain block key is ", phrase);
     setKey(phrase);
+    // console.log(phrase);
   };
 
   const decryptData = async () => {
@@ -83,8 +132,8 @@ const LoginLandingPage = () => {
     var decryptedData = await JSON.parse(bytes.toString(crypto.enc.Utf8));
 
     //log decrypted Data
-    console.log("decrypted Data -");
-    console.log(decryptedData);
+    // console.log("decrypted Data -");
+    // console.log(decryptedData);
     // console.log("Name is ", decryptedData[0].name);
     setName(decryptedData[0].name);
     setAddress(decryptedData[0].address);
@@ -104,7 +153,8 @@ const LoginLandingPage = () => {
       alert("No such Documents!");
     }
   };
-  const getContractData = async () => {
+
+  const getContractDatadata = async () => {
     //   ---------- > Connect to metamask  <-------------
     connectMetamask();
     // --------> Connection with Contract <---------------
@@ -113,39 +163,34 @@ const LoginLandingPage = () => {
     // const phrase = await contract.retrieve();
     ReadBlockchain();
     Read();
+
     decryptData();
+    console.log("Data decrypted");
+    // setToken(makeid(6));
     // console.log(phrase,)
   };
-
-  getContractData();
-
+  getContractDatadata();
   return (
     <div>
       <div>
         <h3>{name}'s Information</h3>
         <div className="table1">
-          <table>
+          <table className="table text-start">
             <tr>
               <td>
-                <b>
-                  <th>Name : </th>
-                </b>
+                <b>Name : </b>
               </td>
               <td>{name}</td>
             </tr>
             <tr>
               <td>
-                <b>
-                  <th>Age :</th>
-                </b>
+                <b>Age : </b>
               </td>
               <td>{age}</td>
             </tr>
             <tr>
               <td>
-                <b>
-                  <th>Gender :</th>
-                </b>
+                <b>Gender : </b>
               </td>
               <td>{gender}</td>
             </tr>
@@ -169,8 +214,19 @@ const LoginLandingPage = () => {
           </table>
         </div>
       </div>
+      <div>
+        <h5>Do you want to share your data with this token? : {token}</h5>
+        <button
+          onClick={() => ShareData(ciphertext, key, token)}
+          className="dataSharingButton"
+        >
+          Share Data
+        </button>
+
+        {/* <h3>Anyone can Rea</h3> */}
+      </div>
     </div>
   );
-};;
+};
 
 export default LoginLandingPage;

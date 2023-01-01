@@ -1,4 +1,16 @@
 .table1{
-  margin-left: 50px;
-  margin: 20px;
+  width: fit-content;
+  /* margin-left: 50px; */
+  margin: 20px auto;
+}
+.table1 td{
+  padding-top: 20px;
+  padding-left: 20px;
+  font-size: 20px;
+}
+.dataSharingButton{
+  padding: 10px 20px;
+  border: 2px solid black;
+  border-radius: 10px;
+  background-color: aqua;
 }

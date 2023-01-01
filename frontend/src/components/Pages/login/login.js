@@ -17,7 +17,7 @@ const LoginPage = () => {
     navigate("/patientLogin");
   };
   const navigateToDoctor = () => {
-    navigate("doctor");
+    navigate("doctorLoginPage");
   };
   const navigateToFirebase = () => {
     navigate("/firebase");
