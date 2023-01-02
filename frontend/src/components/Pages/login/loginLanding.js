@@ -26,6 +26,7 @@ const ShareData = async (ciphertext, key, token) => {
   //   <h3>Anayone can Read your Data with the token.</h3>
   // </div>;
   console.log("here");
+  alert("Your Data is Linked to this token.");
   return (
     <div>
       <h3>Anayone can Read your Data with the token.</h3>
@@ -157,7 +158,7 @@ const LoginLandingPage = () => {
   const getContractDatadata = async () => {
     //   ---------- > Connect to metamask  <-------------
     connectMetamask();
-    // --------> Connection with Contract <---------------
+    // --------> Connection with Contract <--------------
     connectContract();
     // Reading from blockchain
     // const phrase = await contract.retrieve();
@@ -178,19 +179,19 @@ const LoginLandingPage = () => {
           <table className="table text-start">
             <tr>
               <td>
-                <b>Name : </b>
+                <b>Patient Name : </b>
               </td>
               <td>{name}</td>
             </tr>
             <tr>
               <td>
-                <b>Age : </b>
+                <b>Patient Age : </b>
               </td>
               <td>{age}</td>
             </tr>
             <tr>
               <td>
-                <b>Gender : </b>
+                <b>Patient Height : </b>
               </td>
               <td>{gender}</td>
             </tr>
@@ -198,7 +199,7 @@ const LoginLandingPage = () => {
             <tr>
               <td>
                 <b>
-                  <th>Height : </th>
+                  <th>Patient Gender : </th>
                 </b>
               </td>
               <td>{height}</td>
@@ -206,7 +207,7 @@ const LoginLandingPage = () => {
             <tr>
               <td>
                 <b>
-                  <th>Address : </th>
+                  <th>Patient Address : </th>
                 </b>
               </td>
               <td>{add}</td>

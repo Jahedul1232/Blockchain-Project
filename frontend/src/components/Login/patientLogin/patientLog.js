@@ -48,21 +48,24 @@ const PatientLogin = () => {
   }
 
   return (
-    <div>
+    <div class="mt-3">
       <h2>Welcome to Patient Login Page</h2>
-      <div className="canvas">
-        <section class="h-screen">
-          <div class="px-6 h-full text-gray-800">
-            <div class="flex xl:justify-center lg:justify-between justify-center items-center flex-wrap h-full g-6">
-              <div class="grow-0 shrink-1 md:shrink-0 basis-auto xl:w-6/12 lg:w-6/12 md:w-9/12 mb-12 md:mb-0">
+      <div className="mt-5">
+        <section class="">
+          <div class="">
+            <div class="row justify-content-center">
+              {/* h-full */}
+              <div class="col-4">
                 <img
+                  class="imgLog"
                   // src="https://png.pngtree.com/element_our/20200610/ourlarge/pngtree-doctor-appointment-vector-image_2242695.jpg"
                   src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
-                  class="w-full"
+                  // src="https://esrdlab.cse.buet.ac.bd/assets/img/logo.png"
+                  // class="w-full"
                   alt="Sample image"
                 />
               </div>
-              <div class="xl:ml-20 xl:w-5/12 lg:w-5/12 md:w-8/12 mb-12 md:mb-0">
+              <div class="col-5 mt-5 p-5">
                 <form>
                   {/* <div class="flex flex-row items-center justify-center lg:justify-start"> */}
 

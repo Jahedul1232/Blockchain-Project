@@ -1,73 +1,93 @@
 import { React, useState } from "react";
 import "./doctorsLandingPage.css";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, deleteDoc } from "firebase/firestore";
 import { db } from "../../../firabase_config";
 
-function DoctorsLandingPage() {
-  const [name, setName] = useState("");
-  const [age, setAge] = useState("");
-  const [height, setHeight] = useState("");
-  const [add, setAddress] = useState("");
-  const [gender, setGender] = useState("");
-  const [token, setToken] = useState("");
-  const [ciphertext, setCiphertext] = useState("");
-  const [key, setKey] = useState("");
+const DoctorsLandingPage = () => {
+  var [name, setName] = useState("");
+  var [age, setAge] = useState("");
+  var [height, setHeight] = useState("");
+  var [add, setAddress] = useState("");
+  var [gender, setGender] = useState("");
+  var [token, setToken] = useState("");
+  var [ciphertext, setCiphertext] = useState("");
+  var [key, setKey] = useState("");
+  const [value, setValue] = useState();
   console.log("here we are ");
 
   const Read = async (params) => {
+    // console.log("token is ", params);
     if (params === "") {
+      setAddress("");
+      setName("");
+      setAge("");
+      setGender("");
+      setHeight("");
       alert("Input cannot be null");
-      setAddress(" ");
-      setAge(" ");
-      setGender(" ");
-      setHeight(" ");
-      setName(" ");
-      return 0;
-    }
-
-    const docRef = doc(db, "temporary", params);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      // console.log(docSnap.data().data);
-      setCiphertext(docSnap.data().data);
-      setKey(docSnap.data().key);
-      // console.log(data, k);
-      // return docSnap.data().data;
+      // setValue(1);
     } else {
-      alert("No such Documents!");
+      var docRef = doc(db, "temporary", params);
+      var docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        var timeNow = Math.floor(Date.now() / 1000);
+        var timeSavedData = docSnap.data().timeStamp.seconds;
+        console.log("Clou timeStamp is ", timeSavedData);
+        console.log("local timeStamp is ", timeNow);
+        console.log(timeNow - timeSavedData);
+        if (timeNow - timeSavedData <= 3600) {
+          var cipher = docSnap.data().data;
+          var k = docSnap.data().key;
+
+          var crypto = require("crypto-js");
+          // const secretKey = "my-secret-key@123";
+
+          console.log("k is: ", k);
+          console.log("cipher is ", cipher);
+          // Decrypt
+          var bytes = crypto.AES.decrypt(cipher, k);
+          var decryptedData = await JSON.parse(bytes.toString(crypto.enc.Utf8));
+          console.log(decryptedData[0].name);
+          setName(decryptedData[0].name);
+          setAddress(decryptedData[0].address);
+          setAge(decryptedData[0].age);
+          setGender(decryptedData[0].height);
+          setHeight(decryptedData[0].gender);
+          alert("Data Retrieve successfully");
+
+          console.log("in dosnap");
+        } else {
+          await deleteDoc(doc(db, "temporary", params));
+          alert("Token ID is not valid");
+          setToken("");
+          setName("");
+          setAddress("");
+          setAge("");
+          setGender("");
+          setHeight("");
+        }
+        // console.log(docSnap.data().data);
+
+        // return docSnap.data().data;
+      } else {
+        alert("No such Documents!");
+        setAddress("");
+        setName("");
+        setAge("");
+        setGender("");
+        setHeight("");
+      }
     }
-  };
-
-  const decryptData = async () => {
-    var crypto = require("crypto-js");
-    // const secretKey = "my-secret-key@123";
-
-    console.log(key);
-    console.log("cipher si ", ciphertext);
-    // Decrypt
-    var bytes = crypto.AES.decrypt(ciphertext, key);
-    var decryptedData = await JSON.parse(bytes.toString(crypto.enc.Utf8));
-    console.log(decryptedData[0].name);
-    setName(decryptedData[0].name);
-    setAddress(decryptedData[0].address);
-    setAge(decryptedData[0].age);
-    setGender(decryptedData[0].height);
-    setHeight(decryptedData[0].gender);
-    console.log("read successfully");
   };
 
   const ReadData = () => {
-    console.log("Read data");
     Read(token);
-    console.log("afrer read");
-    console.log("before decrypt");
-    decryptData();
   };
   return (
     <div>
+      <h2>Welcome to Doctor's Page</h2>
       <div className="doctorsbox">
         <div>
-          <h5>Welcome to Doctors langing page</h5>
+          <h3>Patient Data</h3>
         </div>
         <br />
         <br />
@@ -98,6 +118,6 @@ function DoctorsLandingPage() {
       </div>
     </div>
   );
-}
+};
 
 export default DoctorsLandingPage;
