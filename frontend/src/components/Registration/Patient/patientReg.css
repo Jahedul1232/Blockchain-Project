@@ -1,22 +1,13 @@
-.canvas{
-  height: 50%;
-  width: 70%;
-}
-
-.imgLog2{
+.imgLog1 {
     -webkit-animation: mover 1s infinite  alternate;
     animation: mover 2s infinite  alternate;
 }
 @-webkit-keyframes mover {
     0% { transform: translateY(0); }
-    100% { transform: translateY(-30px); }
+    100% { transform: translateY(-20px); }
 }
 @keyframes mover {
     0% { transform: translateY(0); }
-    100% { transform: translateY(-25px); }
+    100% { transform: translateY(-20px); }
 }
 
-
-.cardColor{
-    background-color: #f9f3f3;
-}
