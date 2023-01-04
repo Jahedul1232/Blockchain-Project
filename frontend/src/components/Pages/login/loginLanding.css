@@ -14,3 +14,14 @@
   border-radius: 10px;
   background-color: aqua;
 }
+
+.backImage{
+  background-image: url("https://www.skylineuniversity.ac.ae/blog/images/2021/01/08/isvsit.jpg");
+  background-size: cover;
+  /* background: rgb(26, 31, 41); */
+  height: 91vh;
+  margin-top: 0px;
+  font-size:50px;
+  background-repeat:no-repeat;
+  /* filter: blur(); */
+}

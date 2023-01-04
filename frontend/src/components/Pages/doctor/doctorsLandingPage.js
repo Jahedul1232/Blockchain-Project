@@ -56,7 +56,7 @@ const DoctorsLandingPage = () => {
 
           console.log("in dosnap");
         } else {
-          await deleteDoc(doc(db, "temporary", params));
+          await deleteDoc(doc(db, "temporary", params)); 
           alert("Token ID is not valid");
           setToken("");
           setName("");

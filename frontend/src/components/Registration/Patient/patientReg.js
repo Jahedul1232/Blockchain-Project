@@ -159,15 +159,6 @@ const PatientRegistration = () => {
     }
   };
 
-  // const Register = async () => {};
-
-  // function buttonCall() {
-  //   // const navigateToPatient = () => {
-  //   //   navigate("/patient");
-  //   //   // navigate("/patientLogin");
-  //   // };
-  // }
-
   return (
     <div className="container">
       <h2>Welcome to Patient Registration Page</h2>

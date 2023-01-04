@@ -172,59 +172,67 @@ const LoginLandingPage = () => {
   };
   getContractDatadata();
   return (
-    <div>
-      <div>
-        <h3>{name}'s Information</h3>
-        <div className="table1">
-          <table className="table text-start">
-            <tr>
-              <td>
-                <b>Patient Name : </b>
-              </td>
-              <td>{name}</td>
-            </tr>
-            <tr>
-              <td>
-                <b>Patient Age : </b>
-              </td>
-              <td>{age}</td>
-            </tr>
-            <tr>
-              <td>
-                <b>Patient Height : </b>
-              </td>
-              <td>{gender}</td>
-            </tr>
+    <div class="backImage">
+      <h2>Personal Information</h2>
+      <div class="container mt-5"></div>
+      <div class="row justify-content-center">
+        <div class="card rounded-4 col-10 col-sm-8 col-md-8 col-lg-6 col-xl-6 shadow-lg">
+          <div class="card-body">
+            <div>
+              <h3>{name}'s Information</h3>
+              <div className="table1">
+                <table className="text-start">
+                  <tr>
+                    <td>
+                      <b>Patient Name : </b>
+                    </td>
+                    <td>{name}</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <b>Patient Age : </b>
+                    </td>
+                    <td>{age}</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <b>Patient Height : </b>
+                    </td>
+                    <td>{gender}</td>
+                  </tr>
 
-            <tr>
-              <td>
-                <b>
-                  <th>Patient Gender : </th>
-                </b>
-              </td>
-              <td>{height}</td>
-            </tr>
-            <tr>
-              <td>
-                <b>
-                  <th>Patient Address : </th>
-                </b>
-              </td>
-              <td>{add}</td>
-            </tr>
-          </table>
+                  <tr>
+                    <td>
+                      <b>
+                        <th>Patient Gender : </th>
+                      </b>
+                    </td>
+                    <td>{height}</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <b>
+                        <th>Patient Address : </th>
+                      </b>
+                    </td>
+                    <td>{add}</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div class="mt-5">
+              <h5>Do you want to share your data with this token? : {token}</h5>
+              <button
+                onClick={() => ShareData(ciphertext, key, token)}
+                class="btn btn-primary"
+              >
+                Share Data
+              </button>
+
+              {/* <h3>Anyone can Rea</h3> */}
+            </div>
+          </div>
         </div>
-      </div>
-      <div>
-        <h5>Do you want to share your data with this token? : {token}</h5>
-        <button
-          onClick={() => ShareData(ciphertext, key, token)}
-          className="dataSharingButton"
-        >
-          Share Data
-        </button>
-
-        {/* <h3>Anyone can Rea</h3> */}
       </div>
     </div>
   );
