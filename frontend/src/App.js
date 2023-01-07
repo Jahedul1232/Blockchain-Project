@@ -51,7 +51,7 @@ function App() {
           <Routes>
             <Route
               path="/doctorsLandingPage"
-                     doctorsLandingPage
+              doctorsLandingPage
               element={<DoctorsLandingPage />}
             ></Route>
           </Routes>

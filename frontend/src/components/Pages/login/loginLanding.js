@@ -172,11 +172,11 @@ const LoginLandingPage = () => {
   };
   getContractDatadata();
   return (
-    <div class="backImage">
+    <div class="">
+      <div class="container"></div>
       <h2>Personal Information</h2>
-      <div class="container mt-5"></div>
-      <div class="row justify-content-center">
-        <div class="card rounded-4 col-10 col-sm-8 col-md-8 col-lg-6 col-xl-6 shadow-lg">
+      <div class="row justify-content-center mt-5">
+        <div class="m-auto card rounded-4 col-10 col-sm-8 col-md-8 col-lg-5 col-xl-5 shadow-lg">
           <div class="card-body">
             <div>
               <h3>{name}'s Information</h3>
@@ -232,6 +232,13 @@ const LoginLandingPage = () => {
               {/* <h3>Anyone can Rea</h3> */}
             </div>
           </div>
+        </div>
+        <div class="m-auto col-12 col-sm-8 col-md-8 col-lg-4 col-xl-4">
+          <img
+            class=""
+            src="https://clariness.com/wp-content/uploads/2021/08/undraw_personal_information_re_vw8a.svg"
+            alt="Sample image"
+          />
         </div>
       </div>
     </div>

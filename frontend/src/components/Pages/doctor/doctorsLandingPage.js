@@ -13,17 +13,28 @@ const DoctorsLandingPage = () => {
   var [ciphertext, setCiphertext] = useState("");
   var [key, setKey] = useState("");
   const [value, setValue] = useState();
+  var [makeName, setMakeName] = useState("");
+  var [makeAge, setMakeAge] = useState("");
+  var [makeGender, setMakeGender] = useState("");
+  var [makeHeight, setMakeHeight] = useState("");
+  var [makeAddress, setMakeAddress] = useState("");
+
   console.log("here we are ");
 
   const Read = async (params) => {
     // console.log("token is ", params);
     if (params === "") {
+      alert("Input cannot be null");
       setAddress("");
       setName("");
       setAge("");
       setGender("");
       setHeight("");
-      alert("Input cannot be null");
+      setMakeName("");
+      setMakeAddress("");
+      setMakeAge("");
+      setMakeGender("");
+      setMakeHeight("");
       // setValue(1);
     } else {
       var docRef = doc(db, "temporary", params);
@@ -53,10 +64,14 @@ const DoctorsLandingPage = () => {
           setGender(decryptedData[0].height);
           setHeight(decryptedData[0].gender);
           alert("Data Retrieve successfully");
-
+          setMakeName("Patient Name : ");
+          setMakeAddress("Address : ");
+          setMakeAge("Patient Age : ");
+          setMakeGender("Patient Gender : ");
+          setMakeHeight("Patient Height : ");
           console.log("in dosnap");
         } else {
-          await deleteDoc(doc(db, "temporary", params)); 
+          await deleteDoc(doc(db, "temporary", params));
           alert("Token ID is not valid");
           setToken("");
           setName("");
@@ -75,12 +90,19 @@ const DoctorsLandingPage = () => {
         setAge("");
         setGender("");
         setHeight("");
+        setMakeName("");
+        setMakeAddress("");
+        setMakeAge("");
+        setMakeGender("");
+        setMakeHeight("");
       }
     }
   };
 
   const ReadData = () => {
     Read(token);
+
+    console("yes is", age);
   };
   return (
     <div>
@@ -103,18 +125,67 @@ const DoctorsLandingPage = () => {
               onChange={(e) => setToken(e.target.value)}
               value={token}
               // onClick={navigateToPatient}
-              placeholder="Email address"
+              placeholder="Input Generated Token from the Patient side"
             />
           </div>
         </form>
         <button className="tokenButton" onClick={ReadData}>
           Read Data
         </button>
-        <h5>{name}</h5>
-        <h5>{age}</h5>
-        <h5>{gender}</h5>
-        <h5>{height}</h5>
-        <h5>{add}</h5>
+        <div class="text-start m-5">
+          <table class="table table-borderless">
+            {/* <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">First</th>
+                <th scope="col">Last</th>
+                <th scope="col">Handle</th>
+              </tr>
+            </thead> */}
+            <tbody>
+              <tr>
+                <th scope="row">
+                  <h5>{makeName}</h5>
+                </th>
+                <td>
+                  <h5>{name}</h5>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">
+                  <h5>{makeAge}</h5>
+                </th>
+                <td>
+                  <h5>{age}</h5>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">
+                  <h5>{makeHeight}</h5>
+                </th>
+                <td colspan="3">
+                  <h5>{gender}</h5>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">
+                  <h5>{makeGender}</h5>
+                </th>
+                <td colspan="1">
+                  <h5>{height}</h5>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">
+                  <h5>{makeAddress}</h5>
+                </th>
+                <td colspan="1">
+                  <h5>{add}</h5>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

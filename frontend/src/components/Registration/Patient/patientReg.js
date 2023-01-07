@@ -166,16 +166,15 @@ const PatientRegistration = () => {
         <section class="">
           <div class="">
             <div class="row justify-contain-center">
-              <div class="col-12 col-sm-8 col-md-8 col-lg-5 col-xl-5">
+              <div class="col-11 col-sm-8 col-md-8 col-lg-5 col-xl-5">
                 <img
-                  className="imgLog1"
+                  class="imgLog1"
                   // src="https://png.pngtree.com/element_our/20200610/ourlarge/pngtree-doctor-appointment-vector-image_2242695.jpg"
                   src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
-                  class=""
                   alt="Sample image"
                 />
               </div>
-              <div class=" card col-12 col-sm-8 col-md-8 col-lg-5 col-xl-7 shadow-lg p-2">
+              <div class="card col-11 col-sm-8 col-md-8 col-lg-6 col-xl-7 shadow-lg p-2">
                 <div class="card-body">
                   <div class="mt-3">
                     <h3>Registration</h3>
