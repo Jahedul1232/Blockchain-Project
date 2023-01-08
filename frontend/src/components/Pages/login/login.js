@@ -20,7 +20,7 @@ const LoginPage = () => {
     navigate("doctorLoginPage");
   };
   const navigateToFirebase = () => {
-    navigate("/firebase");
+    navigate("/hospitalLoginPage");
   };
 
   return (

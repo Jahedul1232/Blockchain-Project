@@ -113,11 +113,23 @@ const DoctorsLandingPage = () => {
         </div>
         <br />
         <br />
-        <form>
-          {/* <div class="flex flex-row items-center justify-center lg:justify-start"> */}
+        <div class="d-flex px-3">
+          <input
+            class="form-control me-2"
+            onChange={(e) => setToken(e.target.value)}
+            value={token}
+            type="text"
+            placeholder="Input Generated Token from the Patient side"
+          />
+          <button class="btn btn-outline-dark text-nowrap" onClick={ReadData}>
+            Read Data
+          </button>
+        </div>
+        {/* <form> */}
+        {/* <div class="flex flex-row items-center justify-center lg:justify-start"> */}
 
-          {/* <!-- Email input --> */}
-          <div class="mb-6">
+        {/* <!-- Email input --> */}
+        {/* <div class="mb-6">
             <input
               type="text"
               class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
@@ -128,10 +140,10 @@ const DoctorsLandingPage = () => {
               placeholder="Input Generated Token from the Patient side"
             />
           </div>
-        </form>
-        <button className="tokenButton" onClick={ReadData}>
+        </form> */}
+        {/* <button className="tokenButton" onClick={ReadData}>
           Read Data
-        </button>
+        </button> */}
         <div class="text-start m-5">
           <table class="table table-borderless">
             {/* <thead>
