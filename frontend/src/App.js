@@ -12,7 +12,8 @@ import LoginLandingPage from "./components/Pages/login/loginLanding";
 import DoctorLoginPage from "./components/Pages/doctor/doctorLogin";
 import DoctorsLandingPage from "./components/Pages/doctor/doctorsLandingPage";
 import HospitalLogin from "./components/Login/HIS/hospitallogin";
-import HospitalLoginLanginPage from "./components/Login/HIS/loginLandingPage";
+// import HospitalLoginLanginPage from "./components/Login/HIS/loginLandingPage";
+import HospitalLoginLanding from "./components/Pages/his/hisLoginLanding";
 
 function App() {
   return (
@@ -66,7 +67,7 @@ function App() {
           <Routes>
             <Route
               path="/hospitalLoginLanding"
-              element={<HospitalLoginLanginPage />}
+              element={<HospitalLoginLanding />}
             ></Route>
           </Routes>
         </div>

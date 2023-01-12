@@ -6,11 +6,11 @@ import { useNavigate } from "react-router-dom";
 
 const HospitalLogin = () => {
   const navigate = useNavigate();
-  const navigateToHISLandin = () => {
+  const navigateToHISLanding = () => {
     navigate("/hospitalLoginLanding");
   };
   function handleLogin() {
-    navigateToHISLandin();
+    navigateToHISLanding();
   }
 
   return (
