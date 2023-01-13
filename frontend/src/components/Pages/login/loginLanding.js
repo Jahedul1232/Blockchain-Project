@@ -10,6 +10,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../../../firabase_config";
 import { async } from "@firebase/util";
+import { useNavigate } from "react-router-dom";
 import "./loginLanding.css";
 
 let token = "";
@@ -45,6 +46,7 @@ const LoginLandingPage = () => {
   const [add, setAddress] = useState("");
   const [height, setHeight] = useState("");
   const [token, setToken] = useState("");
+  const navigate = useNavigate();
   // const [genete, setGenerate] = useState("");
   // const [user, setUser] = useState();
 
@@ -171,6 +173,11 @@ const LoginLandingPage = () => {
     // console.log(phrase,)
   };
   getContractDatadata();
+  function ReadDatafromHIS()
+  {
+    navigate("/patientfromHIS");
+  }
+
   return (
     <div class="">
       <div class="container"></div>
@@ -224,10 +231,11 @@ const LoginLandingPage = () => {
               <h5>Do you want to share your data with this token? : {token}</h5>
               <button
                 onClick={() => ShareData(ciphertext, key, token)}
-                class="btn btn-primary"
+                class="btn btn-primary m-5"
               >
                 Share Data
               </button>
+              <button class="btn btn-primary" onClick={ReadDatafromHIS}>Read Data</button>
 
               {/* <h3>Anyone can Rea</h3> */}
             </div>

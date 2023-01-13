@@ -1,22 +1,19 @@
 import { useState, useEffect } from "react";
-import {
-  doc,
-  serverTimestamp,
-  setDoc,
-} from "firebase/firestore";
-import {db} from "../../../firabase_config"
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
+import { db } from "../../../firabase_config";
 // let token = "";
 
 function HospitalLoginLanding() {
-  const [test1, setTest1]= useState("");
-  const[result1, setResult1] = useState("");
-  const [test2,setTest2]= useState("");
-  const[result2, setResult2] = useState("");
-  const [test3, setTest3]= useState("");
-  const[result3, setResult3] = useState("");
-  const [token,setToken] = useState("");
+  const [test1, setTest1] = useState("");
+  const [result1, setResult1] = useState("");
+  const [test2, setTest2] = useState("");
+  const [result2, setResult2] = useState("");
+  const [test3, setTest3] = useState("");
+  const [result3, setResult3] = useState("");
+  const [name, setName] = useState("");
+  const [token, setToken] = useState("");
   // const connectionRef = collection(db, "temporary"); //Firebase connection
-  var [text,setText]= useState("")
+  var [text, setText] = useState("");
 
   var data = [
     {
@@ -50,8 +47,8 @@ function HospitalLoginLanding() {
     ).toString();
 
     firebaseStore(secretKey, ciphertext, params);
-    console.log("ciphertext is : ",ciphertext)
-    console.log("secret key is : ",secretKey)
+    console.log("ciphertext is : ", ciphertext);
+    console.log("secret key is : ", secretKey);
 
     // Decrypt
     var bytes = crypto.AES.decrypt(ciphertext, secretKey);
@@ -64,32 +61,47 @@ function HospitalLoginLanding() {
     // return secretKey;
   };
 
-
-  function SaveButton()
-  {
-    console.log("Results are : ",test1," : ",result1,test2," : ",result2,test3," : ",result3)
+  function SaveButton() {
+    console.log(
+      "Results are : ",
+      test1,
+      " : ",
+      result1,
+      test2,
+      " : ",
+      result2,
+      test3,
+      " : ",
+      result3
+    );
     SearchableEncryption(token);
   }
 
-  function shareButton(){
+  function shareButton() {
     var result = "";
     var characters =
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     var charactersLength = characters.length;
     for (var i = 0; i < 6; i++) {
-      result += characters.charAt(
-        Math.floor(Math.random() * charactersLength)
-      );
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
     // console.log("Token is : ", result);
-    setText("Your Data is Linked to this token : ")
-    setToken(result)
+    setText("Your Data is Linked to this token : ");
+    setToken(result);
   }
 
-    return (
+  return (
     <div>
       <form>
-        <div class="row p-4 justify-content-center">
+        <div class="row p-5 justify-content-center">
+          <div class="col-sm-10 col-md-10 col-lg-10 col-xl-10 mb-5">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Patient Email"
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
           <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
             <h4>Test name</h4>
           </div>
@@ -99,42 +111,72 @@ function HospitalLoginLanding() {
         </div>
         <div class="row p-4 justify-content-center">
           <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
-            <input type="text" class="form-control" placeholder="Test name 1" 
-            onChange={(e)=>setTest1(e.target.value)} />
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Test name 1"
+              onChange={(e) => setTest1(e.target.value)}
+            />
           </div>
           <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
-            <input type="text" class="form-control" placeholder="Result" 
-            onChange={(e)=>setResult1(e.target.value)} />
-          </div>
-        </div>
-        <div class="row p-4 justify-content-center">
-          <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
-            <input type="text" class="form-control" placeholder="Test name 2" 
-            onChange={(e)=>setTest2(e.target.value)}/>
-          </div>
-          <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
-            <input type="text" class="form-control" placeholder="Result" 
-            onChange={(e)=>setResult2(e.target.value)}/>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Result"
+              onChange={(e) => setResult1(e.target.value)}
+            />
           </div>
         </div>
         <div class="row p-4 justify-content-center">
           <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
-            <input type="text" class="form-control" placeholder="Test name 3" 
-            onChange={(e)=>setTest3(e.target.value)}/>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Test name 2"
+              onChange={(e) => setTest2(e.target.value)}
+            />
           </div>
           <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
-            <input type="text" class="form-control" placeholder="Result" 
-            onChange={(e)=>setResult3(e.target.value)}/>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Result"
+              onChange={(e) => setResult2(e.target.value)}
+            />
+          </div>
+        </div>
+        <div class="row p-4 justify-content-center">
+          <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Test name 3"
+              onChange={(e) => setTest3(e.target.value)}
+            />
+          </div>
+          <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Result"
+              onChange={(e) => setResult3(e.target.value)}
+            />
           </div>
         </div>
       </form>
-      <button class="btn btn-primary" onClick={SaveButton}> Save </button>
-      <button class="btn btn-primary m-5" onClick={shareButton}>Share Data with Patient</button>
+      <button class="btn btn-primary" onClick={SaveButton}>
+        {" "}
+        Save{" "}
+      </button>
+      <button class="btn btn-primary m-5" onClick={shareButton}>
+        Share Data with Patient
+      </button>
       <div>
-        {text}{token}
+        {text}
+        {token}
       </div>
-    </div>);
-  }
-  
-  export default HospitalLoginLanding;
-  
+    </div>
+  );
+}
+
+export default HospitalLoginLanding;

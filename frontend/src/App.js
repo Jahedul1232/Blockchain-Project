@@ -5,7 +5,7 @@ import Navbar from "./components/Pages/HomePage/Navbar/Navbar";
 import HomePage from "./components/Pages/HomePage/Homepage";
 // import { useNavigate } from "react-router-dom";
 import Patient from "./components/Pages/patient/patient";
-import Firebase_db from "./components/firebase/firebase";   
+import Firebase_db from "./components/firebase/firebase";
 import PatientLogin from "./components/Login/patientLogin/patientLog";
 import PatientRegistration from "./components/Registration/Patient/patientReg";
 import LoginLandingPage from "./components/Pages/login/loginLanding";
@@ -14,6 +14,7 @@ import DoctorsLandingPage from "./components/Pages/doctor/doctorsLandingPage";
 import HospitalLogin from "./components/Login/HIS/hospitallogin";
 // import HospitalLoginLanginPage from "./components/Login/HIS/loginLandingPage";
 import HospitalLoginLanding from "./components/Pages/his/hisLoginLanding";
+import PatientfromHIS from "./components/Pages/patient/patientReadFromHIS";
 
 function App() {
   return (
@@ -69,6 +70,9 @@ function App() {
               path="/hospitalLoginLanding"
               element={<HospitalLoginLanding />}
             ></Route>
+          </Routes>
+          <Routes>
+            <Route path="/patientfromHIS" element={<PatientfromHIS />}></Route>
           </Routes>
         </div>
       </Router>
