@@ -1,6 +1,12 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import { doc, getDoc, deleteDoc } from "firebase/firestore";
-import { db } from "../../../firabase_config";
+// import {firebase.auth} from "firebase";
+// import { getAuth } from "firebase/auth";
+import { db, auth } from "../../../firabase_config";
+import { async } from "@firebase/util";
+let temp = 0;
+let t = 0;
+let interval = "";
 
 function PatientfromHIS() {
   const [token, setToken] = useState("");
@@ -11,79 +17,73 @@ function PatientfromHIS() {
   var [test3, setTest3] = useState("");
   var [result3, setResult3] = useState("");
   var [colon, setColon] = useState("");
+  var [email, setEmail] = useState("");
+  // var [time, setTime] = useState(0);
 
-  const ReadData = async () => {
-    console.log("TOken is ", token);
-    if (token === "") {
-      alert("Input cannot be null");
-      setToken("");
-      setTest1("");
-      setTest2("");
-      setTest3("");
-      setResult1("");
-      setResult2("");
-      setResult3("");
-      setColon("");
-    } else {
-      var docRef = doc(db, "temporary", token);
+  const fetchData = async () => {
+    const user = auth.currentUser.email;
+    setEmail(user);
+    // UserRecord userRecord = FirebaseAuth.getInstance.getUser(uid);
+    console.log("user is : ", user);
+    var docRef = doc(db, "temporary", user);
+    console.log("before await");
+    if (temp <= 0) {
+      console.log(`before  t is ${t} temp is ${temp}`);
       var docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        var timeNow = Math.floor(Date.now() / 1000);
-        var timeSavedData = docSnap.data().timeStamp.seconds;
-        // console.log("Clou timeStamp is ", timeSavedData);
-        // console.log("local timeStamp is ", timeNow);
-        // console.log(timeNow - timeSavedData);
-        if (timeNow - timeSavedData >= 1) {
-          var cipher = docSnap.data().data;
-          var k = docSnap.data().key;
-
-          var crypto = require("crypto-js");
-          // const secretKey = "my-secret-key@123";
-
-          //   console.log("k is: ", k);
-          //   console.log("cipher is ", cipher);
-          // Decrypt
-          var bytes = crypto.AES.decrypt(cipher, k);
-          var decryptedData = await JSON.parse(bytes.toString(crypto.enc.Utf8));
-          console.log(decryptedData);
-          setTest1(decryptedData[0].test1);
-          setTest2(decryptedData[0].test2);
-          setTest3(decryptedData[0].test3);
-          setResult1(decryptedData[0].result1);
-          setResult2(decryptedData[0].result2);
-          setResult3(decryptedData[0].result3);
-          setColon(" : ");
-
-          console.log("in dosnap");
-        } else {
-          await deleteDoc(doc(db, "temporary", token));
-          alert("Token ID is not valid");
-          setToken("");
-          setTest1("");
-          setTest2("");
-          setTest3("");
-          setResult1("");
-          setResult2("");
-          setResult3("");
-          setColon("");
-        }
-        // console.log(docSnap.data().data);
-
-        // return docSnap.data().data;
+      console.log(`after  t is ${t} temp is ${temp}`);
+      if (docSnap.exists() && temp <= 0) {
+        console.log("temp before is : ", temp);
+        temp = temp + 1;
+        console.log(docSnap.data());
+        console.log("temp after is : ", temp);
+        alert("your data is stored in firebase");
+        clearInterval(interval);
+        console.log("cleared the interval");
+        return;
       } else {
-        alert("No such Documents!");
-        //   setAddress("");
-        //   setName("");
-        setTest1("");
-        setTest2("");
-        setTest3("");
-        setResult1("");
-        setResult2("");
-        setResult3("");
-        setColon("");
+        console.log("else of decsnap");
       }
     }
   };
+
+  if (t <= 0) {
+    interval = setInterval(fetchData, 5000);
+    t = t + 1;
+  }
+
+  // function read() {
+  //   console.log("Inside read temp is ", temp);
+  //   temp = temp + 1;
+  //   if (temp >= 10) {
+  //     clearInterval(interval);
+  //     console.log("inside clear ", temp);
+  //   }
+  // }
+
+  // fetchData();
+  // if (temp <= 10) {
+  //   // fetchData();
+  //   console.log("inside settimeout", temp);
+  // } else {
+  //   console.log("perfect");
+  //   temp = temp + 1;
+  // }
+  console.log("the end");
+  // fetchData();
+  // const ReadData = async () => {
+  //   // console.log("Here will be printed");
+  //   // const user = auth.currentUser.email;
+  //   // // UserRecord userRecord = FirebaseAuth.getInstance.getUser(uid);
+  //   // console.log("user is : ", user);
+  //   // var docRef = doc(db, "temporary", user);
+  //   // var docSnap = await getDoc(docRef);
+  //   // if (docSnap.exists()) {
+  //   //   alert("your data is stored in firebase");
+  //   // } else {
+  //   //   alert("Your data is not added");
+  //   // }
+  // };
+
   return (
     <div class="container">
       <div>
@@ -101,7 +101,7 @@ function PatientfromHIS() {
                 type="text"
                 placeholder="Read with the token"
               />
-              <button class="btn btn-secondary text-nowrap" onClick={ReadData}>
+              <button class="btn btn-secondary text-nowrap" onClick={""}>
                 Read Data
               </button>
             </div>

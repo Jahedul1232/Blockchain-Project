@@ -12,6 +12,7 @@ function HospitalLoginLanding() {
   const [result3, setResult3] = useState("");
   const [name, setName] = useState("");
   const [token, setToken] = useState("");
+  var [email, setEmail] = useState("");
   // const connectionRef = collection(db, "temporary"); //Firebase connection
   var [text, setText] = useState("");
 
@@ -26,10 +27,10 @@ function HospitalLoginLanding() {
     },
   ];
 
-  const firebaseStore = async (secretKey, ciphertext, params) => {
+  const firebaseStore = async (secretKey, ciphertext, email) => {
     console.log("inside firebase");
     console.log(`secretKey is ${secretKey} data is ${ciphertext}`);
-    await setDoc(doc(db, "temporary", params), {
+    await setDoc(doc(db, "temporary", email), {
       data: ciphertext,
       key: secretKey,
       timeStamp: serverTimestamp(),
@@ -46,7 +47,7 @@ function HospitalLoginLanding() {
       secretKey
     ).toString();
 
-    firebaseStore(secretKey, ciphertext, params);
+    firebaseStore(secretKey, ciphertext, email);
     console.log("ciphertext is : ", ciphertext);
     console.log("secret key is : ", secretKey);
 
@@ -75,6 +76,7 @@ function HospitalLoginLanding() {
       result3
     );
     SearchableEncryption(token);
+    alert(email, " data is saved");
   }
 
   function shareButton() {
@@ -99,7 +101,8 @@ function HospitalLoginLanding() {
               type="text"
               class="form-control"
               placeholder="Patient Email"
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
             />
           </div>
           <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
