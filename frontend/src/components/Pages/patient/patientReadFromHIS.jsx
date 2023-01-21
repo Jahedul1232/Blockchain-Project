@@ -1,15 +1,22 @@
 import { React, useState, useEffect } from "react";
-import { doc, getDoc, deleteDoc } from "firebase/firestore";
+import {
+  doc,
+  setDoc,
+  addDoc,
+  serverTimestamp,
+  getDoc,
+  deleteDoc,
+} from "firebase/firestore";
 // import {firebase.auth} from "firebase";
 // import { getAuth } from "firebase/auth";
-import { db, auth } from "../../../firabase_config";
+import { db, auth, collection } from "../../../firabase_config";
 import { async } from "@firebase/util";
 let temp = 0;
 let t = 0;
 let interval = "";
 
 function PatientfromHIS() {
-  const [token, setToken] = useState("");
+  const [request, setRequest] = useState("");
   var [test1, setTest1] = useState("");
   var [result1, setResult1] = useState("");
   var [test2, setTest2] = useState("");
@@ -24,7 +31,7 @@ function PatientfromHIS() {
     const user = auth.currentUser.email;
     setEmail(user);
     // UserRecord userRecord = FirebaseAuth.getInstance.getUser(uid);
-    console.log("user is : ", user);
+    console.log("user is : ", email);
     var docRef = doc(db, "temporary", user);
     console.log("before await");
     if (temp <= 0) {
@@ -39,6 +46,7 @@ function PatientfromHIS() {
         alert("your data is stored in firebase");
         clearInterval(interval);
         console.log("cleared the interval");
+        t = t + 1;
         return;
       } else {
         console.log("else of decsnap");
@@ -48,7 +56,7 @@ function PatientfromHIS() {
 
   if (t <= 0) {
     interval = setInterval(fetchData, 5000);
-    t = t + 1;
+    // t = t + 1;
   }
 
   // function read() {
@@ -69,6 +77,13 @@ function PatientfromHIS() {
   //   temp = temp + 1;
   // }
   console.log("the end");
+
+  const RequestData = async () => {
+    const cityRef = doc(db, "cities", "BJ");
+    setDoc(cityRef, { capital: false }, { merge: true });
+    alert("Request is send to the Hospital Information System.");
+    setRequest("");
+  };
   // fetchData();
   // const ReadData = async () => {
   //   // console.log("Here will be printed");
@@ -96,13 +111,16 @@ function PatientfromHIS() {
             <div class="d-flex px-3">
               <input
                 class="form-control me-2"
-                onChange={(e) => setToken(e.target.value)}
-                value={token}
+                onChange={(e) => setRequest(e.target.value)}
+                value={request}
                 type="text"
-                placeholder="Read with the token"
+                placeholder="Enter Hospital ID for Data Request."
               />
-              <button class="btn btn-secondary text-nowrap" onClick={""}>
-                Read Data
+              <button
+                class="btn btn-secondary text-nowrap"
+                onClick={RequestData}
+              >
+                Request
               </button>
             </div>
             <div class="text-start m-5">

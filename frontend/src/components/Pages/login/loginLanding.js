@@ -8,12 +8,15 @@ import {
   getDocFromCache,
   serverTimestamp,
 } from "firebase/firestore";
-import { db } from "../../../firabase_config";
+import { db, auth } from "../../../firabase_config";
 import { async } from "@firebase/util";
 import { useNavigate } from "react-router-dom";
 import "./loginLanding.css";
 
 let token = "";
+let temp = 0;
+let t = 0;
+let interval = "";
 const ShareData = async (ciphertext, key, token) => {
   // console.log(makeid(6));
   await setDoc(doc(db, "temporary", token), {
@@ -28,12 +31,6 @@ const ShareData = async (ciphertext, key, token) => {
   // </div>;
   console.log("here");
   alert("Your Data is Linked to this token.");
-  return (
-    <div>
-      <h3>Anayone can Read your Data with the token.</h3>
-      {/* <div>Token is : {token}</div> */}
-    </div>
-  );
 };
 
 const LoginLandingPage = () => {
@@ -173,8 +170,7 @@ const LoginLandingPage = () => {
     // console.log(phrase,)
   };
   getContractDatadata();
-  function ReadDatafromHIS()
-  {
+  function ReadDatafromHIS() {
     navigate("/patientfromHIS");
   }
 
@@ -235,7 +231,9 @@ const LoginLandingPage = () => {
               >
                 Share Data
               </button>
-              <button class="btn btn-primary" onClick={ReadDatafromHIS}>Read Data</button>
+              <button class="btn btn-primary" onClick={ReadDatafromHIS}>
+                Read Data
+              </button>
 
               {/* <h3>Anyone can Rea</h3> */}
             </div>

@@ -15,6 +15,7 @@ import HospitalLogin from "./components/Login/HIS/hospitallogin";
 // import HospitalLoginLanginPage from "./components/Login/HIS/loginLandingPage";
 import HospitalLoginLanding from "./components/Pages/his/hisLoginLanding";
 import PatientfromHIS from "./components/Pages/patient/patientReadFromHIS";
+import HISRegistration from "./components/Registration/HIS/hisRegistration";
 
 function App() {
   return (
@@ -73,6 +74,9 @@ function App() {
           </Routes>
           <Routes>
             <Route path="/patientfromHIS" element={<PatientfromHIS />}></Route>
+          </Routes>
+          <Routes>
+            <Route path="/hisreg" element={<HISRegistration />}></Route>
           </Routes>
         </div>
       </Router>

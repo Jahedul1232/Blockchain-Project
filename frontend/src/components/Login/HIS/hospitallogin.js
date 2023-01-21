@@ -5,12 +5,44 @@ import { useNavigate } from "react-router-dom";
 // import LoginLandingPage from "../../Pages/login/loginLanding";
 
 const HospitalLogin = () => {
+  const [logEmail, setLogEmail] = useState();
+  const [logPass, setLogPass] = useState();
   const navigate = useNavigate();
+  // const [pass, setPass] = useState();
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+
+    signInWithEmailAndPassword(auth, logEmail, logPass)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        const userID = user.uid;
+        // const id = 5;
+        // console.log(user);
+        alert("Successfully logged in");
+        navigate("/hospitalLoginLanding", { state: { userID: userID } });
+      })
+      .catch((error) => {
+        console.log("error is ", error.message);
+        setLogEmail("");
+        setLogPass("");
+        alert(`${error}`);
+      });
+  };
+
+  // const navigate = useNavigate();
   const navigateToHISLanding = () => {
     navigate("/hospitalLoginLanding");
   };
-  function handleLogin() {
-    navigateToHISLanding();
+  // function handleLogin() {
+  //   navigateToHISLanding();
+  // }
+
+  function buttonCall() {
+    const navigateToPatient = () => {
+      navigate("/hisreg");
+    };
+    navigateToPatient();
   }
 
   return (
@@ -45,8 +77,8 @@ const HospitalLogin = () => {
                         type="text"
                         class="form-control"
                         id="exampleFormControlInput2"
-                        // onChange={(e) => setLogEmail(e.target.value)}
-                        // value={logEmail}
+                        onChange={(e) => setLogEmail(e.target.value)}
+                        value={logEmail}
                         // onClick={navigateToPatient}
                         placeholder="Email address"
                       />
@@ -58,8 +90,8 @@ const HospitalLogin = () => {
                         type="password"
                         class="form-control"
                         id="exampleFormControlInput2"
-                        // onChange={(e) => setLogPass(e.target.value)}
-                        // value={logPass}
+                        onChange={(e) => setLogPass(e.target.value)}
+                        value={logPass}
                         placeholder="Password"
                       />
                     </div>
@@ -83,7 +115,7 @@ const HospitalLogin = () => {
                         <a
                           href="#!"
                           class="text-red-600 hover:text-red-700 focus:text-red-700 transition duration-200 ease-in-out"
-                          onClick={""}
+                          onClick={buttonCall}
                         >
                           Register
                         </a>
@@ -98,5 +130,5 @@ const HospitalLogin = () => {
       </div>
     </div>
   );
-};
+};;;
 export default HospitalLogin;

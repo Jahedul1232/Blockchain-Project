@@ -175,6 +175,12 @@ function HospitalLoginLanding() {
         Share Data with Patient
       </button>
       <div>
+        <div class="row p-4 justify-content-center">
+          <div class="card col-lg-4">
+            <div class="card-header">Request</div>
+          </div>
+        </div>
+
         {text}
         {token}
       </div>
