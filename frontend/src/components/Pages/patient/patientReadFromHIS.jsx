@@ -1,4 +1,5 @@
 import { React, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   doc,
   setDoc,
@@ -25,6 +26,7 @@ function PatientfromHIS() {
   var [result3, setResult3] = useState("");
   var [colon, setColon] = useState("");
   var [email, setEmail] = useState("");
+  const navigate = useNavigate();
   // var [time, setTime] = useState(0);
 
   const fetchData = async () => {
@@ -55,7 +57,7 @@ function PatientfromHIS() {
   };
 
   if (t <= 0) {
-    interval = setInterval(fetchData, 5000);
+    interval = setInterval(fetchData, 10000);
     // t = t + 1;
   }
 
@@ -79,10 +81,24 @@ function PatientfromHIS() {
   console.log("the end");
 
   const RequestData = async () => {
-    const cityRef = doc(db, "cities", "BJ");
-    setDoc(cityRef, { capital: false }, { merge: true });
-    alert("Request is send to the Hospital Information System.");
-    setRequest("");
+    const userID = auth.currentUser.uid;
+    const cityRef = doc(db, `request/HIS`, request, email);
+    // const cityRef = doc(db, `cities`, request, email, "key");
+    setDoc(
+      cityRef,
+      { email: email },
+      { timestamp: serverTimestamp },
+      { merge: true }
+    )
+      .then(function () {
+        alert("Request is send to the Hospital Information System.");
+        setRequest("");
+        navigate("/loginLanding", { state: { userID: userID } });
+      })
+      .catch((e) => {
+        console.log("error in adding");
+        alert("Error in requesting ");
+      });
   };
   // fetchData();
   // const ReadData = async () => {

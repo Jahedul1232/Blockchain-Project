@@ -1,7 +1,30 @@
 import { useState, useEffect } from "react";
-import { doc, serverTimestamp, setDoc } from "firebase/firestore";
-import { db } from "../../../firabase_config";
+import {
+  doc,
+  serverTimestamp,
+  setDoc,
+  collection,
+  query,
+  where,
+  onSnapshot,
+  getDocs,
+  getDoc,
+} from "firebase/firestore";
+// import firebase from "firebase";
+// import { firebase } from "../../../firabase_config";
+import { db, auth } from "../../../firabase_config";
 // let token = "";
+
+function RequestedData() {
+  const user = auth.currentUser.email;
+  const usersCollectionRef = collection(db, "request/HIS", user);
+  // console.log("use ", usersCollectionRef);
+  onSnapshot(usersCollectionRef, (docsSnap) => {
+    docsSnap.forEach((doc) => {
+      console.log(doc.data().email);
+    });
+  });
+}
 
 function HospitalLoginLanding() {
   const [test1, setTest1] = useState("");
@@ -15,6 +38,10 @@ function HospitalLoginLanding() {
   var [email, setEmail] = useState("");
   // const connectionRef = collection(db, "temporary"); //Firebase connection
   var [text, setText] = useState("");
+
+  useEffect(() => {
+    RequestedData();
+  }, []);
 
   var data = [
     {
