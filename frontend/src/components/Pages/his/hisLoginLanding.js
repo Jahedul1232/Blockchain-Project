@@ -10,21 +10,22 @@ import {
   getDocs,
   getDoc,
 } from "firebase/firestore";
-// import firebase from "firebase";
-// import { firebase } from "../../../firabase_config";
-import { db, auth } from "../../../firabase_config";
+import { getStorage, ref, uploadBytes } from "firebase/storage";
+import { db, auth, storage } from "../../../firabase_config";
+// import {storage} from "./firebase"
+import { v4 } from "uuid";
 // let token = "";
 
-function RequestedData() {
-  const user = auth.currentUser.email;
-  const usersCollectionRef = collection(db, "request/HIS", user);
-  // console.log("use ", usersCollectionRef);
-  onSnapshot(usersCollectionRef, (docsSnap) => {
-    docsSnap.forEach((doc) => {
-      console.log(doc.data().email);
-    });
-  });
-}
+// function RequestedData() {
+//   const user = auth.currentUser.email;
+//   const usersCollectionRef = collection(db, "request/HIS", user);
+//   // console.log("use ", usersCollectionRef);
+//   onSnapshot(usersCollectionRef, (docsSnap) => {
+//     docsSnap.forEach((doc) => {
+//       console.log(doc.data().email);
+//     });
+//   });
+// }
 
 function HospitalLoginLanding() {
   const [test1, setTest1] = useState("");
@@ -35,13 +36,24 @@ function HospitalLoginLanding() {
   const [result3, setResult3] = useState("");
   const [name, setName] = useState("");
   const [token, setToken] = useState("");
-  var [email, setEmail] = useState("");
+  var [email, setEmail] = useState(null);
+  var [fileUpload, setFileUpload] = useState(null);
   // const connectionRef = collection(db, "temporary"); //Firebase connection
   var [text, setText] = useState("");
+  // progress
+  const [percent, setPercent] = useState(0);
 
-  useEffect(() => {
-    RequestedData();
-  }, []);
+  // useEffect(() => {
+  //   const user = auth.currentUser.email;
+  //   // setEmail(user);
+  //   const usersCollectionRef = collection(db, "request/HIS", user);
+  //   // console.log("use ", usersCollectionRef);
+  //   onSnapshot(usersCollectionRef, (docsSnap) => {
+  //     docsSnap.forEach((doc) => {
+  //       console.log(doc.data().email);
+  //     });
+  //   });
+  // }, []);
 
   var data = [
     {
@@ -119,28 +131,46 @@ function HospitalLoginLanding() {
     setToken(result);
   }
 
+  const uploadFile = async () => {
+    // Create a root reference
+    // const storage = getStorage();
+    if (fileUpload == null) {
+      alert("File cannot be empty!");
+      return;
+    } else if (email == null) {
+      alert("Please Enter Patient Email ID!");
+      return;
+    }
+
+    const fileRef = ref(storage, `files/${email}/${fileUpload.name + v4()}`);
+    // const uploadTask = uploadBytesResumable(fileRef, fileUpload);
+    uploadBytes(fileRef, fileUpload).then(() => {
+      alert("File uploaded successfully");
+      setEmail(null);
+      setFileUpload(null);
+    });
+  };
+
   return (
     <div>
-      <form>
-        <div class="row p-5 justify-content-center">
-          <div class="col-sm-10 col-md-10 col-lg-10 col-xl-10 mb-5">
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Patient Email"
-              onChange={(e) => setEmail(e.target.value)}
-              value={email}
-            />
-          </div>
-          <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+      {/* <form> */}
+      <div class="row p-5 justify-content-center">
+        <div class="col-sm-6 col-md-10 col-lg-10 col-xl-10 mb-3">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Patient Email"
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
+          />
+        </div>
+      </div>
+      <div class="row p-4 justify-content-center">
+        <div class=" col-6 col-md-6 col-lg-3 col-xl-3">
+          <div class="">
             <h4>Test name</h4>
           </div>
-          <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
-            <h4>Result</h4>
-          </div>
-        </div>
-        <div class="row p-4 justify-content-center">
-          <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+          <div class="mt-3">
             <input
               type="text"
               class="form-control"
@@ -148,17 +178,7 @@ function HospitalLoginLanding() {
               onChange={(e) => setTest1(e.target.value)}
             />
           </div>
-          <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Result"
-              onChange={(e) => setResult1(e.target.value)}
-            />
-          </div>
-        </div>
-        <div class="row p-4 justify-content-center">
-          <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+          <div class="mt-3">
             <input
               type="text"
               class="form-control"
@@ -166,17 +186,7 @@ function HospitalLoginLanding() {
               onChange={(e) => setTest2(e.target.value)}
             />
           </div>
-          <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Result"
-              onChange={(e) => setResult2(e.target.value)}
-            />
-          </div>
-        </div>
-        <div class="row p-4 justify-content-center">
-          <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+          <div class="mt-3">
             <input
               type="text"
               class="form-control"
@@ -184,30 +194,72 @@ function HospitalLoginLanding() {
               onChange={(e) => setTest3(e.target.value)}
             />
           </div>
-          <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+        </div>
+
+        <div class="col-6 col-md-6 col-lg-3 col-xl-3">
+          <div class="">
+            <h4>Result</h4>
+          </div>
+          <div class="mt-3">
             <input
               type="text"
               class="form-control"
-              placeholder="Result"
+              placeholder="Result 1"
+              onChange={(e) => setResult1(e.target.value)}
+            />
+          </div>
+          <div class="mt-3">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Result 2"
+              onChange={(e) => setResult2(e.target.value)}
+            />
+          </div>
+          <div class="mt-3">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Result 3"
               onChange={(e) => setResult3(e.target.value)}
             />
           </div>
         </div>
-      </form>
-      <button class="btn btn-primary" onClick={SaveButton}>
-        {" "}
-        Save{" "}
+        <div class="col-sm-10 col-md-10 col-lg-5 col-xl-5 mt-4 pt-3">
+          <div class="card ">
+            <div class="card-body ml-3 mr-3">
+              <h5 class="card-title">Medical File Upload</h5>
+              <input
+                class="form-control"
+                type="file"
+                // id="formFileMultiple"
+                onChange={(e) => {
+                  setFileUpload(e.target.files[0]);
+                }}
+                // value={fileUpload}
+                // multiple
+              />
+              <button class="btn btn-primary mt-3" onClick={uploadFile}>
+                Upload
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* </form> */}
+      <button class="btn btn-primary " onClick={SaveButton}>
+        Save
       </button>
       <button class="btn btn-primary m-5" onClick={shareButton}>
         Share Data with Patient
       </button>
+
       <div>
         <div class="row p-4 justify-content-center">
           <div class="card col-lg-4">
             <div class="card-header">Request</div>
           </div>
         </div>
-
         {text}
         {token}
       </div>
