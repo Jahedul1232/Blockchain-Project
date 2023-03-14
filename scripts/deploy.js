@@ -26,9 +26,15 @@
 // New Smart Contract deployment for Patient.sol smartContract ........................
 
 const hre = require("hardhat");
+const { ethers } = require("hardhat");
 
 async function main() {
   const con = await hre.ethers.getContractFactory("Storage");
+  // const Token = await ethers.getContractFactory("Token");
+  // const hardhatToken = await Token.deploy();
+  // const ownerBalance = await hardhatToken.balanceOf(owner.address);
+  // console.log("balance is ", ownerBalance);
+
   console.log("Deploying....");
   const storage = await con.deploy();
   await storage.deployed();
@@ -38,9 +44,9 @@ async function main() {
   // console.log(`current value is : ${currentValue}`);
 
   //update the current value
-  // const transacionResponce = await storage.store("5");
-  // await transacionResponce.wait(1);
-  // console.log("data stored");
+  const transacionResponce = await storage.store("5");
+  await transacionResponce.wait(1);
+  console.log("data stored");
   const update = await storage.retrieve();
   console.log(`Updated value is : ${update}`);
 

@@ -14,6 +14,9 @@ import { getStorage, ref, uploadBytes } from "firebase/storage";
 import { db, auth, storage } from "../../../firabase_config";
 // import {storage} from "./firebase"
 import { v4 } from "uuid";
+import { async } from "@firebase/util";
+var nameArray = [];
+
 // let token = "";
 
 // function RequestedData() {
@@ -27,6 +30,8 @@ import { v4 } from "uuid";
 //   });
 // }
 
+const outsideCall = () => {};
+
 function HospitalLoginLanding() {
   const [test1, setTest1] = useState("");
   const [result1, setResult1] = useState("");
@@ -38,22 +43,41 @@ function HospitalLoginLanding() {
   const [token, setToken] = useState("");
   var [email, setEmail] = useState(null);
   var [fileUpload, setFileUpload] = useState(null);
+  var [emailArray, setEmailArray] = useState([]);
+  const [dataArray, setDataArray] = useState([]);
   // const connectionRef = collection(db, "temporary"); //Firebase connection
   var [text, setText] = useState("");
+  var unique = [];
   // progress
   const [percent, setPercent] = useState(0);
+  // var emailArr = [];
 
-  // useEffect(() => {
-  //   const user = auth.currentUser.email;
-  //   // setEmail(user);
-  //   const usersCollectionRef = collection(db, "request/HIS", user);
-  //   // console.log("use ", usersCollectionRef);
-  //   onSnapshot(usersCollectionRef, (docsSnap) => {
-  //     docsSnap.forEach((doc) => {
-  //       console.log(doc.data().email);
-  //     });
-  //   });
-  // }, []);
+  const firstCall = async () => {
+    const user = auth.currentUser.email;
+    // setEmail(user);
+    const usersCollectionRef = collection(db, "request/HIS", user);
+    // console.log("use ", usersCollectionRef);
+    await onSnapshot(usersCollectionRef, (docsSnap) => {
+      console.log(docsSnap.size);
+      docsSnap.forEach((doc) => {
+        // console.log(doc.data().email);
+        // setEmail(doc.data().email);
+        // emailArray.push(doc.data().email);
+        nameArray.push(doc.data().email);
+      });
+      unique = nameArray.filter(
+        (value, index, array) => array.indexOf(value) === index
+      );
+      console.log(unique);
+      setEmailArray([...unique]);
+      // console.log(unique);
+      console.log("unique value is : ", emailArray);
+    });
+  };
+
+  useEffect(() => {
+    firstCall();
+  }, []);
 
   var data = [
     {
@@ -77,10 +101,10 @@ function HospitalLoginLanding() {
     alert("Data stored in firebase");
   };
 
-  const SearchableEncryption = (params) => {
+  const SearchableEncryption = () => {
     var crypto = require("crypto-js");
     // const secretKey = "my-secret-key@123";
-    const secretKey = params;
+    const secretKey = "key";
     var ciphertext = crypto.AES.encrypt(
       JSON.stringify(data),
       secretKey
@@ -90,13 +114,13 @@ function HospitalLoginLanding() {
     console.log("ciphertext is : ", ciphertext);
     console.log("secret key is : ", secretKey);
 
-    // Decrypt
-    var bytes = crypto.AES.decrypt(ciphertext, secretKey);
-    var decryptedData = JSON.parse(bytes.toString(crypto.enc.Utf8));
+    // Decrypt;
+    // var bytes = crypto.AES.decrypt(ciphertext, secretKey);
+    // var decryptedData = JSON.parse(bytes.toString(crypto.enc.Utf8));
 
-    //log decrypted Data
-    console.log("decrypted Data -");
-    console.log(decryptedData);
+    // //log decrypted Data
+    // console.log("decrypted Data -");
+    // console.log(decryptedData);
 
     // return secretKey;
   };
@@ -114,7 +138,7 @@ function HospitalLoginLanding() {
       " : ",
       result3
     );
-    SearchableEncryption(token);
+    SearchableEncryption();
     alert(email, " data is saved");
   }
 
@@ -131,9 +155,22 @@ function HospitalLoginLanding() {
     setToken(result);
   }
 
+  function getDataTime() {
+    // var today = new Date();
+    // var date =
+    //   today.getFullYear() +
+    //   "-" +
+    //   (today.getMonth() + 1) +
+    //   "-" +
+    //   today.getDate();
+    // var time =
+    //   today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    // var dateTime = date + " " + time;
+    var timeNow = Math.floor(Date.now() / 1000);
+    console.log(timeNow);
+  }
+
   const uploadFile = async () => {
-    // Create a root reference
-    // const storage = getStorage();
     if (fileUpload == null) {
       alert("File cannot be empty!");
       return;
@@ -142,13 +179,24 @@ function HospitalLoginLanding() {
       return;
     }
 
+    getDataTime();
+
+    // var crypto = require("crypto-js");
+    // // const secretKey = "my-secret-key@123";
+    // const secretKey = "secretKey";
+    // var ciphertext = crypto.AES.encrypt(fileUpload, secretKey);
+    // console.log("file encrypted");
+
     const fileRef = ref(storage, `files/${email}/${fileUpload.name + v4()}`);
-    // const uploadTask = uploadBytesResumable(fileRef, fileUpload);
+    // const uploadTask = uploadBytesResumable(fileRef,     fileUpload);
     uploadBytes(fileRef, fileUpload).then(() => {
       alert("File uploaded successfully");
       setEmail(null);
       setFileUpload(null);
     });
+    getDataTime();
+    // var decrypted = crypto.AES.decrypt(ciphertext, secretKey);
+    // console.log("file decrypted");
   };
 
   return (
@@ -237,7 +285,7 @@ function HospitalLoginLanding() {
                   setFileUpload(e.target.files[0]);
                 }}
                 // value={fileUpload}
-                // multiple
+                multiple
               />
               <button class="btn btn-primary mt-3" onClick={uploadFile}>
                 Upload
@@ -258,6 +306,16 @@ function HospitalLoginLanding() {
         <div class="row p-4 justify-content-center">
           <div class="card col-lg-4">
             <div class="card-header">Request</div>
+            <ul>
+              {/* // Mapping over array of friends */}
+              {emailArray.map((arr, index) => (
+                // Setting "index" as key because name and age can be repeated, It will be better if you assign uniqe id as key
+                <li key={index}>
+                  <span>{arr}</span>
+                </li>
+              ))}
+              {/* <button onClick={handleAddFriend}>Add Friends</button> */}
+            </ul>
           </div>
         </div>
         {text}

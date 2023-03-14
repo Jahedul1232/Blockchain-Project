@@ -3,9 +3,12 @@ import { ethers } from "ethers";
 import { useLocation } from "react-router-dom";
 import {
   doc,
+  docs,
   getDoc,
+  getDocs,
   setDoc,
   getDocFromCache,
+  collection,
   serverTimestamp,
 } from "firebase/firestore";
 import { db, auth } from "../../../firabase_config";
@@ -36,6 +39,7 @@ const ShareData = async (ciphertext, key, token) => {
 const LoginLandingPage = () => {
   let [account, setAccount] = useState("");
   const [ciphertext, setCiphertext] = useState("");
+  const [recordCiphertext, setRecordCiphertext] = useState();
   const [key, setKey] = useState("");
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
@@ -44,6 +48,7 @@ const LoginLandingPage = () => {
   const [height, setHeight] = useState("");
   const [token, setToken] = useState("");
   const navigate = useNavigate();
+  var [dataArray, setDataArray] = useState([]);
   // const [genete, setGenerate] = useState("");
   // const [user, setUser] = useState();
 
@@ -51,6 +56,27 @@ const LoginLandingPage = () => {
   const location = useLocation();
   const docRef = doc(db, "records", location.state.userID);
   let contract;
+
+  const fetchData = async () => {
+    const user = await auth.currentUser.uid;
+    console.log("user is ", user);
+    const recordRef = collection(db, "records");
+
+    console.log("Data array is : ", dataArray);
+
+    // var insideID = "sItLp1l7Aq1TQ0VY7G77";
+
+    var parentDoc = collection(db, "records", user, "records");
+    var parentDocId = parentDoc.id;
+    console.log("ID is : ", parentDocId);
+    // var docRef = doc(db, "records", user, "records");
+    // console.log(docRef.id);
+    // var docSnap = await getDoc(docRef);
+    // const data = await collection(db, "records"); //.doc(user, records).get();
+    // console.log("data is", data.data);
+    // console.log(docSnap.data());
+  };
+  fetchData();
 
   useEffect(() => {
     function makeid(length) {
@@ -234,6 +260,14 @@ const LoginLandingPage = () => {
               <button class="btn btn-primary" onClick={ReadDatafromHIS}>
                 Read Data
               </button>
+              <div>
+                {dataArray.map((item) => (
+                  <div key={item.id}>
+                    <h2>{item.title}</h2>
+                    <p>{item.description}</p>
+                  </div>
+                ))}
+              </div>
 
               {/* <h3>Anyone can Rea</h3> */}
             </div>

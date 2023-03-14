@@ -132,5 +132,5 @@ const PatientLogin = () => {
       </div>
     </div>
   );
-};;;;;;;;;;;;;;;;;;;;;;;
+};
 export default PatientLogin;

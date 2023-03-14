@@ -4,13 +4,14 @@ import {
   doc,
   setDoc,
   addDoc,
+  collection,
   serverTimestamp,
   getDoc,
   deleteDoc,
 } from "firebase/firestore";
 // import {firebase.auth} from "firebase";
 // import { getAuth } from "firebase/auth";
-import { db, auth, collection } from "../../../firabase_config";
+import { db, auth } from "../../../firabase_config";
 import { async } from "@firebase/util";
 let temp = 0;
 let t = 0;
@@ -26,8 +27,70 @@ function PatientfromHIS() {
   var [result3, setResult3] = useState("");
   var [colon, setColon] = useState("");
   var [email, setEmail] = useState("");
+  var [recordCiphertext, setRecordCiphertext] = useState("");
   const navigate = useNavigate();
+  const connectionRef = collection(db, "records");
   // var [time, setTime] = useState(0);
+
+  const firebaseStore = async (secretKey, ciphertext, email) => {
+    const id = auth.currentUser.uid;
+    console.log("id is ", id);
+    try {
+      const docRef = await addDoc(
+        collection(db, "records", id, "Medical-record"),
+        {
+          record: ciphertext,
+          // age: age,
+          // Add any additional fields here
+        }
+      );
+      //Previoud delete code
+      await deleteDoc(doc(db, "temporary", email));
+    } catch (error) {
+      alert("Error adding the documents");
+      console.error("Error adding document: ", error);
+    }
+  };
+
+  const makingDataOwn = (data, key) => {
+    console.log("inside makingDataown is : ", data, key);
+
+    var crypto = require("crypto-js");
+    // const secretKey = "my-secret-key@123";
+    var secretKey = "key";
+    console.log("Here is the decrypted version...");
+    //
+    //
+    // Decrypt
+    //
+    var bytes = crypto.AES.decrypt(data, secretKey);
+    var decryptedData = JSON.parse(bytes.toString(crypto.enc.Utf8));
+
+    //log decrypted Data
+    console.log("decrypted Data -");
+    console.log(decryptedData);
+
+    //Encrypt data again to take the Ownership
+
+    const secretKeyOwn = "my-secret-key@123";
+    // var secretKey = "key";
+    // var ciphertext = data;
+    var ciphertext = crypto.AES.encrypt(
+      JSON.stringify(data),
+      secretKey
+    ).toString();
+
+    firebaseStore(secretKeyOwn, ciphertext, email);
+    console.log("ciphertext is : ", ciphertext);
+    console.log("secret key is : ", secretKey);
+    // Decrypt
+    // var bytes = crypto.AES.decrypt(data, secretKey);
+    // var decryptedData = JSON.parse(bytes.toString(crypto.enc.Utf8));
+
+    // //log decrypted Data
+    // console.log("decrypted Data -");
+    // console.log(decryptedData);
+  };
 
   const fetchData = async () => {
     const user = auth.currentUser.email;
@@ -46,6 +109,7 @@ function PatientfromHIS() {
         console.log(docSnap.data());
         console.log("temp after is : ", temp);
         alert("your data is stored in firebase");
+        makingDataOwn(docSnap.data().data, docSnap.data.key);
         clearInterval(interval);
         console.log("cleared the interval");
         t = t + 1;
