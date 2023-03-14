@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+// import { useCollectionData } from "react-firebase-hooks/firestore";
 import {
   doc,
   serverTimestamp,
@@ -33,6 +34,7 @@ var nameArray = [];
 const outsideCall = () => {};
 
 function HospitalLoginLanding() {
+  // const [docs, loading, error] = useCollectionData(query);
   const [test1, setTest1] = useState("");
   const [result1, setResult1] = useState("");
   const [test2, setTest2] = useState("");
@@ -89,6 +91,7 @@ function HospitalLoginLanding() {
       result3: result3,
     },
   ];
+  console.log("data is : ", data);
 
   const firebaseStore = async (secretKey, ciphertext, email) => {
     console.log("inside firebase");
@@ -99,6 +102,12 @@ function HospitalLoginLanding() {
       timeStamp: serverTimestamp(),
     });
     alert("Data stored in firebase");
+    console.log(
+      "after encryption : ",
+      ciphertext,
+      "  Secret key is : ",
+      secretKey
+    );
   };
 
   const SearchableEncryption = () => {
@@ -115,12 +124,12 @@ function HospitalLoginLanding() {
     console.log("secret key is : ", secretKey);
 
     // Decrypt;
-    // var bytes = crypto.AES.decrypt(ciphertext, secretKey);
-    // var decryptedData = JSON.parse(bytes.toString(crypto.enc.Utf8));
+    var bytes = crypto.AES.decrypt(ciphertext, secretKey);
+    var decryptedData = JSON.parse(bytes.toString(crypto.enc.Utf8));
 
-    // //log decrypted Data
-    // console.log("decrypted Data -");
-    // console.log(decryptedData);
+    //log decrypted Data
+    console.log("decrypted Data -");
+    console.log(decryptedData);
 
     // return secretKey;
   };

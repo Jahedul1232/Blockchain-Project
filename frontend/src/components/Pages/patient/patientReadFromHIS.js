@@ -40,19 +40,22 @@ function PatientfromHIS() {
         collection(db, "records", id, "Medical-record"),
         {
           record: ciphertext,
+          key: secretKey,
           // age: age,
           // Add any additional fields here
         }
       );
       //Previoud delete code
       await deleteDoc(doc(db, "temporary", email));
+      alert("You have got your data from Hospital");
     } catch (error) {
       alert("Error adding the documents");
-      console.error("Error adding document: ", error);
+      // console.error("Error adding document: ", error);
     }
   };
 
-  const makingDataOwn = (data, key) => {
+  const makingDataOwn = async (data, key) => {
+    const useremail = await auth.currentUser.email;
     console.log("inside makingDataown is : ", data, key);
 
     var crypto = require("crypto-js");
@@ -77,10 +80,10 @@ function PatientfromHIS() {
     // var ciphertext = data;
     var ciphertext = crypto.AES.encrypt(
       JSON.stringify(data),
-      secretKey
+      secretKeyOwn
     ).toString();
 
-    firebaseStore(secretKeyOwn, ciphertext, email);
+    firebaseStore(secretKeyOwn, ciphertext, useremail);
     console.log("ciphertext is : ", ciphertext);
     console.log("secret key is : ", secretKey);
     // Decrypt
@@ -96,7 +99,7 @@ function PatientfromHIS() {
     const user = auth.currentUser.email;
     setEmail(user);
     // UserRecord userRecord = FirebaseAuth.getInstance.getUser(uid);
-    console.log("user is : ", email);
+    // console.log("user is : ", email);
     var docRef = doc(db, "temporary", user);
     console.log("before await");
     if (temp <= 0) {
@@ -160,7 +163,7 @@ function PatientfromHIS() {
         navigate("/loginLanding", { state: { userID: userID } });
       })
       .catch((e) => {
-        console.log("error in adding");
+        // console.log("error in adding");
         alert("Error in requesting ");
       });
   };

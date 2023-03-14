@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
+import { useCollectionData } from "react-firebase-hooks/firestore";
 import { useLocation } from "react-router-dom";
 import {
   doc,
@@ -10,6 +11,7 @@ import {
   getDocFromCache,
   collection,
   serverTimestamp,
+  Query,
 } from "firebase/firestore";
 import { db, auth } from "../../../firabase_config";
 import { async } from "@firebase/util";
@@ -57,26 +59,22 @@ const LoginLandingPage = () => {
   const docRef = doc(db, "records", location.state.userID);
   let contract;
 
-  const fetchData = async () => {
-    const user = await auth.currentUser.uid;
-    console.log("user is ", user);
-    const recordRef = collection(db, "records");
+  const fetchData = async (docs) => {
+    // const user = await auth.currentUser.uid;
+    console.log("docs are : ", docs);
+    var crypto = require("crypto-js");
+    // const secretKey = "my-secret-key@123";
+    var keySecret = "my-secret-key@123";
 
-    console.log("Data array is : ", dataArray);
-
-    // var insideID = "sItLp1l7Aq1TQ0VY7G77";
-
-    var parentDoc = collection(db, "records", user, "records");
-    var parentDocId = parentDoc.id;
-    console.log("ID is : ", parentDocId);
-    // var docRef = doc(db, "records", user, "records");
-    // console.log(docRef.id);
-    // var docSnap = await getDoc(docRef);
-    // const data = await collection(db, "records"); //.doc(user, records).get();
-    // console.log("data is", data.data);
-    // console.log(docSnap.data());
+    // Decrypt
+    var bytes = crypto.AES.decrypt(docs, keySecret);
+    var decryptedRecords = await JSON.parse(bytes.toString(crypto.enc.Utf8));
+    console.log("decrypted data is : ", decryptedRecords);
   };
-  fetchData();
+  const user = auth.currentUser.uid;
+  const query = collection(db, "records", user, "records");
+  const [docs, loading, error] = useCollectionData(query);
+  fetchData(docs);
 
   useEffect(() => {
     function makeid(length) {
@@ -152,7 +150,8 @@ const LoginLandingPage = () => {
   const decryptData = async () => {
     var crypto = require("crypto-js");
     // const secretKey = "my-secret-key@123";
-
+    console.log("ciphertext is : ", ciphertext);
+    console.log("key is : ", key);
     // Decrypt
     var bytes = crypto.AES.decrypt(ciphertext, key);
     var decryptedData = await JSON.parse(bytes.toString(crypto.enc.Utf8));
