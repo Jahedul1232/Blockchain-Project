@@ -59,22 +59,31 @@ const LoginLandingPage = () => {
   const docRef = doc(db, "records", location.state.userID);
   let contract;
 
-  const fetchData = async (docs) => {
+  const fetchData = async (recordsDocs) => {
     // const user = await auth.currentUser.uid;
-    console.log("docs are : ", docs);
-    var crypto = require("crypto-js");
-    // const secretKey = "my-secret-key@123";
-    var keySecret = "my-secret-key@123";
+    if (recordsDocs.exists) {
+      console.log("inside if condition.....");
+      console.log("docs are : ", recordsDocs);
+      let dataDocs = recordsDocs[0].record;
+      // console.log("specific ciphertext is : ", dataDocs);
+      var crypto = require("crypto-js");
+      // const secretKey = "my-secret-key@123";
+      var keySecret = "my-secret-key@123";
 
-    // Decrypt
-    var bytes = crypto.AES.decrypt(docs, keySecret);
-    var decryptedRecords = await JSON.parse(bytes.toString(crypto.enc.Utf8));
-    console.log("decrypted data is : ", decryptedRecords);
+      // Decrypt
+      var recordsBytes = crypto.AES.decrypt(dataDocs, keySecret);
+      var decryptedRecords = await JSON.parse(
+        recordsBytes.toString(crypto.enc.Utf8)
+      );
+      console.log("decrypted data is : ", decryptedRecords);
+    } else {
+      console.log("there is no record");
+    }
   };
   const user = auth.currentUser.uid;
-  const query = collection(db, "records", user, "records");
-  const [docs, loading, error] = useCollectionData(query);
-  fetchData(docs);
+  const query = collection(db, "records", user, "Medical-record");
+  const [recordsDocs, loading, error] = useCollectionData(query);
+  fetchData(recordsDocs);
 
   useEffect(() => {
     function makeid(length) {
@@ -278,6 +287,20 @@ const LoginLandingPage = () => {
             src="https://clariness.com/wp-content/uploads/2021/08/undraw_personal_information_re_vw8a.svg"
             alt="Sample image"
           />
+        </div>
+      </div>
+      <div className="container">
+        <div class="card">
+          <div class="card-body">
+            {loading && "Loading.."}
+            <ul>
+              {recordsDocs?.map((doc) => (
+                <div key={Math.random()}>
+                  <li>{doc.record}</li>
+                </div>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
     </div>

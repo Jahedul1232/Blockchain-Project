@@ -112,8 +112,8 @@ function HospitalLoginLanding() {
 
   const SearchableEncryption = () => {
     var crypto = require("crypto-js");
-    // const secretKey = "my-secret-key@123";
-    const secretKey = "key";
+    const secretKey = "my-secret-key@123";
+    // const secretKey = "key";
     var ciphertext = crypto.AES.encrypt(
       JSON.stringify(data),
       secretKey
@@ -132,7 +132,7 @@ function HospitalLoginLanding() {
     console.log(decryptedData);
 
     // return secretKey;
-  };
+  };;
 
   function SaveButton() {
     console.log(

@@ -32,21 +32,22 @@ function PatientfromHIS() {
   const connectionRef = collection(db, "records");
   // var [time, setTime] = useState(0);
 
-  const firebaseStore = async (secretKey, ciphertext, email) => {
+  const firebaseStore = async (ciphertextRecords, keySecret, userEmail) => {
     const id = auth.currentUser.uid;
     console.log("id is ", id);
     try {
       const docRef = await addDoc(
         collection(db, "records", id, "Medical-record"),
         {
-          record: ciphertext,
-          key: secretKey,
+          record: ciphertextRecords,
+          key: keySecret,
           // age: age,
           // Add any additional fields here
         }
       );
+      // console.log("encrypted ciphertext for firebase is : ", ciphertext);
       //Previoud delete code
-      await deleteDoc(doc(db, "temporary", email));
+      await deleteDoc(doc(db, "temporary", userEmail));
       alert("You have got your data from Hospital");
     } catch (error) {
       alert("Error adding the documents");
@@ -54,13 +55,13 @@ function PatientfromHIS() {
     }
   };
 
-  const makingDataOwn = async (data, key) => {
+  const makingDataOwn = async (data) => {
     const useremail = await auth.currentUser.email;
-    console.log("inside makingDataown is : ", data, key);
+    console.log("inside makingDataown is : ", data);
 
     var crypto = require("crypto-js");
-    // const secretKey = "my-secret-key@123";
-    var secretKey = "key";
+    const secretKey = "my-secret-key@123";
+    // var secretKey = "key";
     console.log("Here is the decrypted version...");
     //
     //
@@ -76,16 +77,16 @@ function PatientfromHIS() {
     //Encrypt data again to take the Ownership
 
     const secretKeyOwn = "my-secret-key@123";
-    // var secretKey = "key";
-    // var ciphertext = data;
-    var ciphertext = crypto.AES.encrypt(
-      JSON.stringify(data),
+    // // var secretKey = "key";
+    // // var ciphertext = data;
+    var ciphertextRecords = crypto.AES.encrypt(
+      JSON.stringify(decryptedData),
       secretKeyOwn
     ).toString();
 
-    firebaseStore(secretKeyOwn, ciphertext, useremail);
-    console.log("ciphertext is : ", ciphertext);
-    console.log("secret key is : ", secretKey);
+    firebaseStore(ciphertextRecords, secretKeyOwn, useremail);
+    // console.log("ciphertext is : ", ciphertext);
+    // console.log("secret key is : ", secretKey);
     // Decrypt
     // var bytes = crypto.AES.decrypt(data, secretKey);
     // var decryptedData = JSON.parse(bytes.toString(crypto.enc.Utf8));
@@ -112,7 +113,7 @@ function PatientfromHIS() {
         console.log(docSnap.data());
         console.log("temp after is : ", temp);
         alert("your data is stored in firebase");
-        makingDataOwn(docSnap.data().data, docSnap.data.key);
+        makingDataOwn(docSnap.data().data);
         clearInterval(interval);
         console.log("cleared the interval");
         t = t + 1;
