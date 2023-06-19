@@ -1,14 +1,14 @@
-import React, { useEffect, useState , useRef  } from "react";
+import React, { useEffect, useState , useRef, useCallback  } from "react";
 import { ethers } from "ethers";
-import { useCollectionData } from "react-firebase-hooks/firestore";
-import { useLocation } from "react-router-dom";
+import { useCollectionData } from "react-firebase-hooks/firestore"; 
+// import { useLocation } from "react-router-dom"; 
 import {
   doc,
   docs,
   getDoc,
   getDocs,
   setDoc,
-  getDocFromCache,
+  getDocFromCache, 
   collection,
   serverTimestamp,
   Query,
@@ -18,10 +18,7 @@ import { async } from "@firebase/util";
 import { useNavigate } from "react-router-dom";
 import "./loginLanding.css";
 
-let token = "";
-let temp = 0;
-let t = 0;
-let interval = "";
+
 const ShareData = async (ciphertext, key, token) => {
   // console.log(makeid(6));
   await setDoc(doc(db, "temporary", token), {
@@ -29,16 +26,20 @@ const ShareData = async (ciphertext, key, token) => {
     key: key,
     timeStamp: serverTimestamp(),
   });
-  console.log("From outside token is ", token);
+  // console.log("From outside token is ", token);
   // setToken(token);
   // <div>
   //   <h3>Anayone can Read your Data with the token.</h3>
   // </div>;
-  console.log("here");
+  // console.log("here");
   alert("Your Data is Linked to this token.");
 };
 
 const LoginLandingPage = () => {
+  // console.log("repeated print")
+  const [data_records, setData_records] = useState([])
+  const [doc_id, setDoc_id] = useState();
+  var [getData, setData] = useState([]);
   let [account, setAccount] = useState("");
   const [ciphertext, setCiphertext] = useState("");
   const [recordCiphertext, setRecordCiphertext] = useState();
@@ -50,35 +51,38 @@ const LoginLandingPage = () => {
   const [height, setHeight] = useState("");
   const [token, setToken] = useState("");
   const [report, setReport] = useState("");
-  // const [test1, setTest1] = useState();
-  // const [result1, setResult1] = useState();
-  // const [test2, setTest2] = useState();
-  // const [result2, setResult2] = useState();
-  // const [test3, setTest3] = useState();
-  // const [result3, setResult3] = useState();
   const navigate = useNavigate();
-  // var [dataArray, setDataArray] = useState([]);
+
   let [testArray, setTestArray] = useState([]);
   let [resultArray, setResultArray] = useState([]);
   var [testName,setTestName] = useState();
-  var [resultName,setResultName] = useState();
+  var [resultName, setResultName] = useState();
+  const fetchedDocuments = [];
+  const [jsonData, setJsonData] = useState([]);
+  const [encryptData, setEncrypData] = useState([]); 
+  const [userID, setUserID] = useState();
+  
+
+
   var crypto = require("crypto-js");
   let hasRunOnce = useRef(false);
 
   const { ethereum } = window;
-  const location = useLocation();
-  const docRef = doc(db, "records", location.state.userID);
-  let contract;
+  // const location = useLocation();
+  // console.log("Location is : ",location);
+  
+  // console.log(docRef)
+  let contract;      
   let val_temp = 0;
 
   const fetchData = async (recordsDocs) => {
-    // const user = await auth.currentUser.uid;
-    console.log("inside fetchData", recordsDocs[0]);
+    // const user = await auth.currentUser.uid;    
+    // console.log("inside fetchData", recordsDocs[0]);
     val_temp = 1;
-    console.log("val_temp is ",val_temp)
+    // console.log("val_temp is ",val_temp)
     if (recordsDocs.length > 0) {
-      console.log("inside if condition.....");
-      console.log("docs are : ", recordsDocs);
+      // console.log("inside if condition.....");
+      // console.log("docs are : ", recordsDocs);
       let dataDocs = recordsDocs[0].record;
       // console.log("specific ciphertext is : ", dataDocs);
       
@@ -90,42 +94,48 @@ const LoginLandingPage = () => {
       let decryptedRecords = await JSON.parse(
         recordsBytes.toString(crypto.enc.Utf8)
       );
-      console.log("decrypted data is : ", decryptedRecords[0]);
+      // console.log("decrypted data is : ", decryptedRecords[0]);
       // setDataArray(decryptedRecords);
-      console.log("first values are : ", decryptedRecords[0].test1, decryptedRecords[0].result1);
-      var first_test = await decryptedRecords[0].test1;
-      var second_test = await decryptedRecords[0].test2;
-      var third_test = await decryptedRecords[0].test3;
-      var first_result =await decryptedRecords[0].result1;
-      var second_result =await decryptedRecords[0].result2;
-      var third_result =await decryptedRecords[0].result3;
-      console.log("first_test is : ", first_test);
-      setTestArray((testArray)=>[...testArray, first_test]);
-      setResultArray((resultArray)=>[...resultArray, first_result]);
-      setTestArray((testArray)=>[...testArray, second_test]);
-      setResultArray((resultArray)=>[...resultArray, second_result]);
-      setTestArray((testArray)=>[...testArray, third_test]);
-      setResultArray((resultArray) => [...resultArray, third_result]);
+      // console.log("first values are : ", decryptedRecords[0].test1, decryptedRecords[0].result1);
+      // var first_test = await decryptedRecords[0].test1;
+      // var second_test = await decryptedRecords[0].test2;
+      // var third_test = await decryptedRecords[0].test3;
+      // var first_result =await decryptedRecords[0].result1;
+      // var second_result =await decryptedRecords[0].result2;
+      // var third_result =await decryptedRecords[0].result3;
+      // console.log("first_test is : ", first_test);
+      // setTestArray((testArray)=>[...testArray, first_test]);
+      // setResultArray((resultArray)=>[...resultArray, first_result]);
+      // setTestArray((testArray)=>[...testArray, second_test]);
+      // setResultArray((resultArray)=>[...resultArray, second_result]);
+      // setTestArray((testArray)=>[...testArray, third_test]);
+      // setResultArray((resultArray) => [...resultArray, third_result]);
       setResultName("Result")
       setTestName("Test Name")
 
       hasRunOnce.current = true;
     } else {
-      console.log("there is no record");
+      // console.log("there is no record");
     }
-
-    console.log("Array size : ", testArray);
   };
-  const user = auth.currentUser.uid;
+  // const user = auth.currentUser.uid;       
+  const user = localStorage.getItem('userID');
   const query = collection(db, "records", user, "Medical-record");
   const [recordsDocs, loading, error] = useCollectionData(query);
   if (!hasRunOnce.current) {
     fetchData(recordsDocs);
-    console.log("inside fethch call...")
+    // console.log("inside fethch call...")
   }
   
 
   useEffect(() => {
+    var userID = localStorage.getItem('userID');
+    console.log("userID is : ",userID)
+    setUserID(userID);
+    getContractDatadata();
+    // showDecryptedData();
+    getRecords();
+    // dataDecrypt();
     function makeid(length) {
       var result = "";
       var characters =
@@ -136,7 +146,7 @@ const LoginLandingPage = () => {
           Math.floor(Math.random() * charactersLength)
         );
       }
-      console.log("Token is : ", result);
+      // console.log("Token is : ", result);
       return result;
     }
     setToken(makeid(6));
@@ -145,10 +155,6 @@ const LoginLandingPage = () => {
     function getData(data) {
       console.log("inside useEffect ",data)
     }
-
-
-
-
   }, []);
 
   const connectMetamask = async () => {
@@ -200,7 +206,7 @@ const LoginLandingPage = () => {
 
   const ReadBlockchain = async () => {
     const phrase = await contract.retrieve();
-    console.log("from ReadBlockchain block key is ", phrase);
+    // console.log("from ReadBlockchain block key is ", phrase);
     setKey(phrase);
     // console.log(phrase);
   };
@@ -208,10 +214,11 @@ const LoginLandingPage = () => {
   const decryptData = async () => {
     var crypto = require("crypto-js");
     // const secretKey = "my-secret-key@123";
-    console.log("ciphertext is : ", ciphertext);
-    console.log("key is : ", key);
+    // console.log("ciphertext is : ", ciphertext);
+    // console.log("key is : ", key);
     // Decrypt
-    var bytes = crypto.AES.decrypt(ciphertext, key);
+    console.log("inside decryptData");      
+    var bytes = await crypto.AES.decrypt(ciphertext, key);
     var decryptedData = await JSON.parse(bytes.toString(crypto.enc.Utf8));
 
     //log decrypted Data
@@ -224,20 +231,144 @@ const LoginLandingPage = () => {
     setGender(decryptedData[0].height);
     setHeight(decryptedData[0].gender);
     // alert("Data is decrypted Successfully.....");
+    console.log("Name is : ", decryptedData[0].name);  
     console.log("read successfully");
 
     
   };
 
-  const Read = async (params) => {
+  const Read = async () => {
+    const docRef = doc(db, "records", userID);
     const docSnap = await getDoc(docRef);
+    console.log("if data exist or not :", docSnap.exists());
     if (docSnap.exists()) {
       setCiphertext(docSnap.data().data);
+      console.log("data is : ", docSnap.data().data);
       // setName(docSnap.data().key);
     } else {
       alert("No such Documents!");
     }
   };
+  const showDecryptedData = async () => {
+    
+    var crypto = require("crypto-js");
+    const docRef = doc(db, "testRecords", "records");
+    let sKey = "my-secret-key@123";
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      let cipher = docSnap.data().data;
+      // setData(docSnap.data().data);
+      // console.log("From firestore decrypted data is : ", cipher);
+       // Decrypt
+    var bytesfromFirebase = crypto.AES.decrypt(cipher, sKey);
+    var decryptedDataFirebase = JSON.parse(bytesfromFirebase.toString(crypto.enc.Utf8));
+
+    // log decrypted Data
+    // console.log("decrypted Data from firebase is  -");
+      // console.log(decryptedDataFirebase);
+      setData(decryptedDataFirebase);
+    } else {
+      alert("No such Documents!");
+    }
+  }
+
+  // const addData = useCallback((decryptData) => {
+  //   // const newData = 'New Data'; // Example: New data to be added to the array
+  //   setData_records((data_records) => {
+  //   const newArray = [...data_records];
+  //   newArray.push(decryptData);
+  //   return newArray;
+  // });
+  // }, []);
+
+  const dataDecrypt = (ciphertext, timeStamp) => {
+    console.log("inside dataDecrypt : ",ciphertext,timeStamp)
+    var crypto = require("crypto-js");
+    const secretKey = "my-secret-key@123";
+    // console.log("ciphertext is : ", ciphertext);
+    // console.log("key is : ", key);
+    // Decrypt
+    
+    
+    var bytesRecord = crypto.AES.decrypt(ciphertext, secretKey);
+    console.log("call before error: ")
+    const decryptedDataRecord = JSON.parse(bytesRecord.toString(crypto.enc.Utf8));
+    console.log("decrypted Data is : ", decryptedDataRecord);
+
+    // console.log(timeStamp);
+    
+    // console.log("decrypted Data is : ", decryptedData);
+    // addData(decryptData);
+    // console.log(decryptedData);
+    // setData_records((data_records)=>[...data_records, decryptedData[0]]);
+    // setTestArray((testArray)=>[...testArray, first_test]);
+    //log decrypted Data
+    // console.log("decrypted Data -");
+    // console.log(decryptedData);
+    // console.log("Name is ", decryptedData[0].name);
+    // setName(decryptedData[0].name);
+    // setAddress(decryptedData[0].address);
+    // setAge(decryptedData[0].age);
+    // setGender(decryptedData[0].height);
+    // setHeight(decryptedData[0].gender);
+    // alert("Data is decrypted Successfully.....");
+    // console.log("read successfully");
+    console.log("Code work share 10 "); 
+    return decryptedDataRecord;
+
+    
+  };
+
+  const getRecords = async () => {
+    setJsonData([]);
+    const user = localStorage.getItem("userID");
+    // console.log("user1 is ...........",user1)
+    // const user = auth.currentUser.uid;
+    console.log("user is ................",user)
+      try {
+        const querySnapshot = await getDocs(collection(db, 'records',user, 'Medical-record')); 
+        // const fetchedDocuments = [];
+        console.log("code works here 1");
+        querySnapshot.forEach((doc) => {
+          fetchedDocuments.push({ id: doc.id, ...doc.data() });
+        });
+        console.log("code works here 2");
+
+        // console.log("fetchedDocuments are : ", fetchedDocuments);
+        // setEncrypData(fetchedDocuments);
+        console.log("fetchedDocuments length is : ", fetchedDocuments.length);
+        fetchedDocuments.forEach((document)  => {
+          console.log("documnet is : ", document);
+          console.log("code works here before call");
+          
+          var result = dataDecrypt(document.record, document.timeStamp);
+ 
+           
+          // result.then((res) => {
+            // console.log("code works here 5",res);
+          // const milliseconds = document.timestamp.seconds * 1000 + Math.floor(document.timestamp.nanoseconds / 1e6);
+          const milliseconds = document.timeStamp.seconds*1000 + Math.floor(document.timeStamp.nanoseconds/ 1e6) ;
+
+          // console.log("millisecordsn are : ",milliseconds);
+          let dte = new Date(milliseconds);
+          const formattedDateTime = dte.toLocaleString(); 
+        console.log("code works here 6");
+          // console.log(dte);  
+          setJsonData((jsonData) => [...jsonData, [result, formattedDateTime]]);
+        console.log("code works here 3");
+          // result.push([document.record, document.timeStamp]);
+        // });
+        console.log("code works here 4");
+          })
+          // console.log("result is : ",result);
+        
+      } catch (error) {
+        console.error('Error retrieving documents:', error);
+      }
+      console.log("jsonDatas are : ", jsonData); 
+    };
+
+   
 
   const getContractDatadata = async () => {
     //   ---------- > Connect to metamask  <-------------
@@ -247,14 +378,21 @@ const LoginLandingPage = () => {
     // Reading from blockchain
     // const phrase = await contract.retrieve();
     ReadBlockchain();
+    
     Read();
 
     decryptData();
-    console.log("Data decrypted");
-    // setToken(makeid(6));
+
+    // getRecords();
+
+
+    // console.log("test name is :",jsonData[0][1].testName);
+    console.log("Data decrypted");  
+    // setToken(makeid(6));    
     // console.log(phrase,)
-  };
-  getContractDatadata();
+  };  
+  getContractDatadata();  
+  
   function ReadDatafromHIS() {
     navigate("/patientfromHIS");
   }
@@ -334,7 +472,8 @@ const LoginLandingPage = () => {
         <div class="m-auto col-12 col-sm-8 col-md-8 col-lg-4 col-xl-4">
           <img
             class=""
-            src="https://clariness.com/wp-content/uploads/2021/08/undraw_personal_information_re_vw8a.svg"
+            src="https://global-uploads.webflow.com/5dd07f6bc5a7ed039456e602/5f5fd64b71bab15ef7e39743_undraw_medicine_b1ol-2.svg"
+            // src="https://clariness.com/wp-content/uploads/2021/08/undraw_personal_information_re_vw8a.svg"
             alt="Sample image"
           />
         </div>
@@ -458,21 +597,43 @@ const LoginLandingPage = () => {
           <div class="card-body">
             {/* <div>{report}</div> */}
             {loading && "Loading.."}
-            <table class="w-full text-lg text-left text-gray-500 dark:text-gray-400" > {/*style={{ 'max-width': '300px' }} */}
-              <thead class="text-m text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <th scope="col" class="px-6 py-3">{testName}</th>
-                <th scope="col" class="px-6 py-3">{resultName}</th>
-              </thead>
+            <table class="w-full text-lg text-left text-gray-500 dark:text-gray-400" >
               <tbody>
-                {testArray.map((item,index) => (
-                  <tr class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
-                    <th key={index} scope="row" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    {item}</th>
-                    <td>{resultArray[index] }</td>
+                {jsonData.map((item, index) => (
+                  <tr class="bg-white border-b dark:bg-gray-900 dark:border-gray-700 row">
+                    <th key={index} scope="row" class="col-3 px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                      
+                      {index+1}&nbsp;&nbsp;&nbsp;&nbsp; { item[1]}</th>
+                    <td class='col-9'> 
+                  <table class='w-full'> 
+              <thead class="text-m text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <th scope="col" class="col-5 px-6 py-6 ">{testName}</th>    {/*col-lg-4 col-md-4 m-5  px-6 py-6*/}
+                <th scope="col" class="col-5 mr-5 ml-5">{resultName}</th>
+              </thead>
+                      <tbody>{item[0].map((it, ind) => (
+                      <tr><td key={ind}>{it.testName}</td><td>{it.testResult}</td></tr>
+                    ))}</tbody></table></td>
                   </tr>
                 ))}
+
+                {/* {data_records.map((item,index) => (
+                  <tr class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
+                    <th key={[index]} scope="row" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                      {getData[index].testName}</th>
+                    <td>{getData[index].testResult }</td>
+                  </tr>
+                ))} */}
+                {/* <div>{data_records[0].testName}</div> */}
+
                 </tbody>
             </table>
+
+
+            {/* <div>
+              {fetchedDocuments.map((item, index) => (
+                {index}
+              ))}
+            </div> */}
           </div>
         </div>
       </div>

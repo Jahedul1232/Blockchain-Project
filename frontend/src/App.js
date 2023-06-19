@@ -16,6 +16,7 @@ import HospitalLogin from "./components/Login/HIS/hospitallogin";
 import HospitalLoginLanding from "./components/Pages/his/hisLoginLanding";
 import PatientfromHIS from "./components/Pages/patient/patientReadFromHIS";
 import HISRegistration from "./components/Registration/HIS/hisRegistration";
+import TestPage from "./components/Registration/HIS/testPage";
 
 function App() {
   return (
@@ -77,6 +78,9 @@ function App() {
           </Routes>
           <Routes>
             <Route path="/hisreg" element={<HISRegistration />}></Route>
+          </Routes>
+          <Routes>
+            <Route path="/testpage" element={<TestPage />}></Route>
           </Routes>
         </div>
       </Router>

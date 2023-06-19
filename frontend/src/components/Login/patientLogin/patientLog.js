@@ -21,7 +21,8 @@ const PatientLogin = () => {
         // const id = 5;
         // console.log(user);
         alert("Successfully logged in");
-        navigate("/loginLanding", { state: { userID: userID } });
+        localStorage.setItem('userID', userID);
+        navigate("/loginLanding");     {/* , { state: { userID: userID } }   */}
       })
       .catch((error) => {
         console.log("error is ", error.message);

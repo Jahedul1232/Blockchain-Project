@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 // import { useCollectionData } from "react-firebase-hooks/firestore";
+import icon from "../../../assets/add.png";
 import {
   doc,
   serverTimestamp,
@@ -8,6 +9,7 @@ import {
   query,
   where,
   onSnapshot,
+  deleteDoc,
   getDocs,
   getDoc,
 } from "firebase/firestore";
@@ -34,6 +36,91 @@ var nameArray = [];
 const outsideCall = () => {};
 
 function HospitalLoginLanding() {
+  var [formInputs, setFormInputs] = useState([{ testName: '', testResult: '' }]);
+  var [getData, setData] = useState([]);
+
+  const handleInputChange = (event, index) => {
+    const { name, value } = event.target;
+    const inputs = [...formInputs];
+    inputs[index][name] = value;
+    setFormInputs(inputs);
+  };
+
+  const handleAddInput = () => {
+    setFormInputs([...formInputs, { testName: '', testResult: '' }]);
+  };
+
+  const handleRemoveInput = (index) => {
+    const inputs = [...formInputs];
+    inputs.splice(index, 1);
+    setFormInputs(inputs);
+  };
+
+  const fireStore =async (ciphertext) => {
+    console.log("inside firebase");
+    console.log(`data is ${ciphertext}`);
+    await setDoc(doc(db, "testRecords",'records'), {
+      data: ciphertext,
+      // key: secretKey,
+      timeStamp: serverTimestamp(),
+    });
+  }
+
+
+  const encrypt = (text) => {
+    var crypto = require("crypto-js");
+    const secretKey = "my-secret-key@123";
+    var ciphertext = crypto.AES.encrypt(
+      JSON.stringify(text),
+      secretKey
+    ).toString();
+
+    console.log("ciphertext is : ", ciphertext);
+
+    // fireStore(ciphertext);
+    const secret = "my-secret-key@123";
+    firebaseStore(secret, ciphertext, email)
+    alert("Data stored successfully")
+    // Decrypt
+    var bytes = crypto.AES.decrypt(ciphertext, secretKey);
+    var decryptedData = JSON.parse(bytes.toString(crypto.enc.Utf8));
+
+    // log decrypted Data
+    console.log("decrypted Data -");
+    console.log(decryptedData);
+
+    return secretKey;
+  }
+
+  const handleSubmit =async (event) => {
+    event.preventDefault();
+    console.log(formInputs);
+    encrypt(formInputs);
+    setEmail("")
+    await deleteDoc(doc(db, "request/HIS", user, email));
+  };
+  const showDecryptedData = async () => {
+    var crypto = require("crypto-js");
+    const docRef = doc(db, "testRecords", "records");
+    let sKey = "my-secret-key@123";
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      let cipher = docSnap.data().data;
+      // setData(docSnap.data().data);
+      console.log("From firestore decrypted data is : ", cipher);
+       // Decrypt
+    var bytesfromFirebase = crypto.AES.decrypt(cipher, sKey);
+    var decryptedDataFirebase = JSON.parse(bytesfromFirebase.toString(crypto.enc.Utf8));
+
+    // log decrypted Data
+    console.log("decrypted Data from firebase is  -");
+      console.log(decryptedDataFirebase);
+      setData(decryptedDataFirebase);
+    } else {
+      alert("No such Documents!");
+    }
+  }
+
   // const [docs, loading, error] = useCollectionData(query);
   const [test1, setTest1] = useState("");
   const [result1, setResult1] = useState("");
@@ -47,6 +134,7 @@ function HospitalLoginLanding() {
   var [fileUpload, setFileUpload] = useState(null);
   var [emailArray, setEmailArray] = useState([]);
   const [dataArray, setDataArray] = useState([]);
+  const[user,setUser] = useState('');
   // const connectionRef = collection(db, "temporary"); //Firebase connection
   var [text, setText] = useState("");
   var unique = [];
@@ -55,7 +143,9 @@ function HospitalLoginLanding() {
   // var emailArr = [];
 
   const firstCall = async () => {
+    nameArray = [];
     const user = auth.currentUser.email;
+    setUser(user);
     // setEmail(user);
     const usersCollectionRef = collection(db, "request/HIS", user);
     // console.log("use ", usersCollectionRef);
@@ -134,7 +224,7 @@ function HospitalLoginLanding() {
     // return secretKey;
   };;
 
-  function SaveButton() {
+  const SaveButton =async()=>{
     console.log(
       "Results are : ",
       test1,
@@ -149,6 +239,9 @@ function HospitalLoginLanding() {
     );
     SearchableEncryption();
     alert(email, " data is saved");
+    //Deleting data from firebase 
+    await deleteDoc(doc(db, "request/HIS", user, email));
+    await firstCall();
   }
 
   function shareButton() {
@@ -210,7 +303,6 @@ function HospitalLoginLanding() {
 
   return (
     <div>
-      {/* <form> */}
       <div class="row p-5 justify-content-center">
         <div class="col-sm-6 col-md-10 col-lg-10 col-xl-10 mb-3">
           <input
@@ -222,7 +314,7 @@ function HospitalLoginLanding() {
           />
         </div>
       </div>
-      <div class="row p-4 justify-content-center">
+     {/* <div class="row p-4 justify-content-center">
         <div class=" col-6 col-md-6 col-lg-3 col-xl-3">
           <div class="">
             <h4>Test name</h4>
@@ -303,13 +395,80 @@ function HospitalLoginLanding() {
           </div>
         </div>
       </div>
-      {/* </form> */}
+      
       <button class="btn btn-primary " onClick={SaveButton}>
         Save
       </button>
       <button class="btn btn-primary m-5" onClick={shareButton}>
         Share Data with Patient
-      </button>
+      </button> */}
+
+      {/*........................   start.................................*/}
+
+      
+      {/* <div><h2>Test Page for the input field</h2></div> */}
+      <div class='container'>
+      <div class='mt-5 row' >
+        <div class='col-sm-8 col-md-8 col-lg-8 col-xl-8'>
+    
+            <form onSubmit={handleSubmit}>
+              <div class="row">
+                <div class='col-5'><h4> Test Name</h4></div>
+                <div class='col-5'><h4> Test Result</h4></div>
+              </div>
+          {formInputs.map((input, index) => (
+            <div class="row p-4 justify-content-center">
+              <div class="col-5 col-sm-5 col-md-5 col-lg-5">
+                <input type="text" class="form-control" name="testName" placeholder='Name' value={input.name} onChange={(e) => handleInputChange(e, index)} />
+              </div>
+              <div class="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5">
+                <input type="text" class="form-control" name="testResult" placeholder='Result' value={input.name} onChange={(e) => handleInputChange(e, index)} />
+              </div>
+              <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                <button class="btn btn-outline-danger" type="button" onClick={() => handleRemoveInput(index)}> &#128465;</button>
+              </div>
+              
+            </div>
+          ))}
+              <div class="d-flex justify-content-center align-items-center">
+
+                {/* <button class='btn btn-primary' onClick={handleAddInput}> <h2 className="m-0">+</h2></button> */}
+                <img src={icon} onClick={handleAddInput} />
+                <button class="btn btn-primary m-3"  type="submit">Submit</button>
+              </div>
+              <div></div>
+          
+          {/* <button type="button" onClick={handleAddInput}>Add Input</button> */}
+          
+          </form>
+        </div>
+        <div class='col-sm-4 col-md-4 col-lg-4 col-xl-4'>
+          <div class="card ">
+            <div class="card-body ml-3 mr-3">
+              <h5 class="card-title">Medical File Upload</h5>
+              <input
+                class="form-control"
+                type="file"
+                // id="formFileMultiple"
+                onChange={(e) => {
+                  setFileUpload(e.target.files[0]);
+                }}
+                // value={fileUpload}
+                multiple
+              />
+              <button class="btn btn-primary mt-3" onClick={uploadFile}>
+                Upload
+              </button>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+      {/* <div><button onClick={showDecryptedData}>Show Decrypted Data</button></div> */}
+      
+
+      {/*........................    End     ...................................*/}
+      
 
       <div>
         <div class="row p-4 justify-content-center">

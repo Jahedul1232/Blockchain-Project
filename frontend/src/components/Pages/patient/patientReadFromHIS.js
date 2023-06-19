@@ -32,6 +32,25 @@ function PatientfromHIS() {
   const connectionRef = collection(db, "records");
   // var [time, setTime] = useState(0);
 
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+
+
+  const deleteData = async (userEmail) => {
+    try {
+      console.log("inside delete funcion")
+      await deleteDoc(doc(db, "temporary", userEmail));
+      console.log("deleted successfully");
+    }catch(err){
+      console.log("error deleting the records",err);
+      alert("Error deleting the documents");
+    }
+    
+  }
+
   const firebaseStore = async (ciphertextRecords, keySecret, userEmail) => {
     const id = auth.currentUser.uid;
     console.log("id is ", id);
@@ -40,20 +59,24 @@ function PatientfromHIS() {
         collection(db, "records", id, "Medical-record"),
         {
           record: ciphertextRecords,
-          key: keySecret,
+          // key: keySecret,
+          timeStamp: serverTimestamp(),
           // age: age,
           // Add any additional fields here
         }
       );
+      // deleteData(userEmail)
       // console.log("encrypted ciphertext for firebase is : ", ciphertext);
       //Previoud delete code
-      await deleteDoc(doc(db, "temporary", userEmail));
+      // await deleteDoc(doc(db, "temporary", userEmail));
       alert("You have got your data from Hospital");
     } catch (error) {
       alert("Error adding the documents");
       // console.error("Error adding document: ", error);
     }
   };
+
+  
 
   const makingDataOwn = async (data) => {
     const useremail = await auth.currentUser.email;
@@ -85,6 +108,7 @@ function PatientfromHIS() {
     ).toString();
 
     firebaseStore(ciphertextRecords, secretKeyOwn, useremail);
+    deleteData(useremail);
     // console.log("ciphertext is : ", ciphertext);
     // console.log("secret key is : ", secretKey);
     // Decrypt
@@ -114,7 +138,8 @@ function PatientfromHIS() {
         console.log("temp after is : ", temp);
         alert("your data is stored in firebase");
         makingDataOwn(docSnap.data().data);
-        clearInterval(interval);
+        deleteData(user);
+        // clearInterval(interval);
         console.log("cleared the interval");
         t = t + 1;
         return;
@@ -124,10 +149,11 @@ function PatientfromHIS() {
     }
   };
 
-  if (t <= 0) {
-    interval = setInterval(fetchData, 10000);
-    // t = t + 1;
-  }
+  // if (t <= 0) {
+  //   interval = setInterval(fetchData, 10000);
+  //   t = t + 1;
+  // }
+  // fetchData();
 
   // function read() {
   //   console.log("Inside read temp is ", temp);

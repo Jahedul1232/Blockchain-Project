@@ -24,7 +24,7 @@ const PatientRegistration = () => {
   const [regEmail, setRegEmail] = useState();
   const [regPass, setRegPass] = useState();
   const navigate = useNavigate();
-  const connectionRef = collection(db, "records"); //Firebase connection
+  // const connectionRef = collection(db, "records"); //Firebase connection
   const { ethereum } = window;
 
   var data = [
@@ -42,7 +42,7 @@ const PatientRegistration = () => {
     console.log(`secretKey is ${secretKey} data is ${ciphertext}`);
     await setDoc(doc(db, "records", params), {
       data: ciphertext,
-      key: secretKey,
+      // key: secretKey,
       timeStamp: serverTimestamp(),
     });
     console.log("stored data");
