@@ -208,7 +208,7 @@ const LoginLandingPage = () => {
     const phrase = await contract.retrieve();
     // console.log("from ReadBlockchain block key is ", phrase);
     setKey(phrase);
-    // console.log(phrase);
+    console.log(` secret key is ${phrase}`);
   };
 
   const decryptData = async () => {
